@@ -14,17 +14,19 @@ namespace BlackJack.BusinessLogic.Interfaces
 {
     public interface IGameService
     {
-        Task StartGame(StartGameViewModel startGame);
-        Task SetGame(SetGameViewModel setGame);
-        Task<SetGameViewModel> SetGame(int id);
+        Task<int> StartGame(StartGameViewModel startGame);
+        Task<IEnumerable<GetAllPlayersViewModel>> GetAllPlayers();
+        Task<IEnumerable<GetAllDealersViewModel>> GetAllDealers();
+        Task<IEnumerable<ShowGamePlayerViewModel>> GetAllGamePlayersByGameId(int id);
+        Task<IEnumerable<ShowGamePlayerViewModel>> GetAllGamePlayersWithoutDealerByGameId(int id);
+        Task<ShowGamePlayerViewModel> GetGameDealerByGameId(int id);
         Task<IEnumerable<GetAllGamesViewModel>> GetAllGames();
         Task<ShowGameViewModel> ShowGame(int id);
-        Task StartGameRound(int gamePlayerId, PassCardViewModel passCard, int playerId);
-        Task FinishFirstGameRound(ShowGameViewModel showGame);
-        Task CheckGameRoundResults(ShowGamePlayerViewModel showGamePlayer);
+        Task StartFirstGameRound(int id);
+        Task StartGameRound(int gamePlayerId, Card passCard);
+        Task FinishGame(ShowGameViewModel showGame);
         Task Enough(int id);
-        Task CalculateGameResult(ShowGamePlayerViewModel player, GetPlayerByIdViewModel dealer);
-        Task FinishGame(ShowGamePlayerViewModel  player);
+        Task More(int id);
         Task Delete(int id);
         Task Save();
     }

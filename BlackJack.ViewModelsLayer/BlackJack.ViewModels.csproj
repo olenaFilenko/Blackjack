@@ -49,7 +49,6 @@
     <Compile Include="GameServiceViewModels\GetAllGamesViewModel.cs" />
     <Compile Include="GamePlayerServiceViewModels\ShowGamePlayerViewModel.cs" />
     <Compile Include="CardServiceViewModel\PassCardViewModel.cs" />
-    <Compile Include="GameServiceViewModels\SetGameViewModel.cs" />
     <Compile Include="GameServiceViewModels\ShowGameViewModel.cs" />
     <Compile Include="GameServiceViewModels\StartGameRoundViewModel.cs" />
     <Compile Include="GameServiceViewModels\StartGameViewModel.cs" />

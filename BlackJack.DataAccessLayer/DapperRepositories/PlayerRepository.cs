@@ -5,84 +5,104 @@ using BlackJack.DataAccess.Iterfaces;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using Dapper;
+using Dapper.Contrib.Extensions;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BlackJack.DataAccess.DapperRepositories
 {
     public class PlayerRepository : IPlayerRepository
     {
-        private IDbConnection db = new SqlConnection("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = '|DataDirectory|\\MyDB.mdf'; Integrated Security = True");
+        private string _connectionString;
 
-        public PlayerRepository() {
-            db.Open();
+        public PlayerRepository(string connectionString) {
+            _connectionString=connectionString;
+        }
+        
+        public async  Task DeletePlayer(int id)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("DELETE FROM Players WHERE Id=@Id", new { Id = id });
+            }
         }
 
-        /*~PlayerRepository()
+        public async Task<IEnumerable<Player>> GetAllPlayers()
         {
-            db.Close();
-        }*/
-        public  Task DeletePlayer(int id)
-        {
-            //db.Open();
-            return db.ExecuteAsync("DELETE FROM Players WHERE Id=@Id", new { Id = id });
+            var result = new List<Player>();
+            using (SqlConnection db = new SqlConnection(_connectionString))
+            {
+                result = (await db.QueryAsync<Player>("SELECT * FROM Players")).ToList();
+            }
+            return result;
         }
 
-        public Task<IEnumerable<Player>> GetAllPlayers()
+        public async Task<IEnumerable<Player>> GetBots()
         {
-            //db.Open();
-            return db.QueryAsync<Player>("SELECT * FROM Players");
-        }
-
-        public Task<IEnumerable<Player>> GetBots()
-        {
-            //db.Open();
-            return db.QueryAsync<Player>("SELECT * FROM Players WHERE RoleId=@Role", new { Role = Role.Bot });
+            var result = new List<Player>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                result = (await db.QueryAsync<Player>("SELECT * FROM Players WHERE RoleId=@Role", new { Role = Role.Bot })).ToList();
+            }
+            return result;
         }
 
         public async Task<IEnumerable<Player>> GetDealers()
         {
-            //db.Open();
-            IEnumerable < Player > dealers= await db.QueryAsync<Player>("SELECT * FROM Players WHERE RoleId=@Role", new { Role = Role.Dealer });
-            
+            var dealers = new List<Player>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                dealers = (await db.QueryAsync<Player>("SELECT * FROM Players WHERE RoleId=@Role", new { Role = Role.Dealer })).ToList();
+                
+            }
             return dealers;
         }
 
-        public Task<Player> GetPlayerById(int id)
+        public async Task<Player> GetPlayerById(int id)
         {
-            //db.Open();
-            return db.QueryFirstOrDefaultAsync<Player>("Select * From Players WHERE Id=@Id", new { Id = id });
+            Player player = new Player();
+            using (SqlConnection db = new SqlConnection(_connectionString))
+            {
+                 player=( await db.QueryFirstOrDefaultAsync<Player>("Select * From Players WHERE Id=@Id", new { Id = id }));
+            }
+            return player;
         }
 
         public async Task<IEnumerable<Player>> GetPlayers()
         {
-            //db.Open();
-            IEnumerable<Player> players= await db.QueryAsync<Player>("SELECT * FROM Players WHERE RoleId=@Role", new { Role = Role.Player });
-            //db.Close();
+            var players = new List<Player>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                players = (await db.QueryAsync<Player>("SELECT * FROM Players WHERE RoleId=@Role", new { Role = Role.Player })).ToList();
+            }
             return players;
-            
         }
 
-        public Task InsertPlayer(Player player)
+        public async Task InsertPlayer(Player player)
         {
-            string sql = "INSERT INTO Players (Name, Points, RoleId) Values(@Name, @Points, @RoleId);";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { Name = player.Name, Points = player.Points, RoleId = (int)player.RoleId });
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.InsertAsync(player);
+            }               
         }
 
-        public Task Save()
+        public async Task Save()
         {
-            //db.Open();
-            return db.ExecuteAsync("COMMIT;");
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("COMMIT;");
+            } 
         }
 
-        public Task UpdatePlayer(Player player)
-        {
-            string sql = "UPDATE Players SET Name=@Name, Points=@Points, RoleId=@RoleId WHERE Id=@Id;";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { Name = player.Name, Points = player.Points, RoleId =(int)player.RoleId, Id = player.Id });
+        public async Task UpdatePlayer(Player player)
+        {            
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.UpdateAsync(player);
+            }
         }
     }
 }

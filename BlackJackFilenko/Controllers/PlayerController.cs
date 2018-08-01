@@ -43,7 +43,7 @@ namespace BlackJackFilenko.Controllers
             try
             {
                 await _playerService.AddPlayer(player);
-                return RedirectToAction("Index");
+                return RedirectToAction("StartGame","Game");
                 return View();
             }
             catch(Exception e)

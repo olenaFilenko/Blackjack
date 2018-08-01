@@ -43,7 +43,7 @@ namespace BlackJackFilenko.Controllers
             try
             {
                 await _cardService.Add(card);
-                await _cardService.Save();
+                //await _cardService.Save();
                 return RedirectToAction("Index");
                 return View();
                 

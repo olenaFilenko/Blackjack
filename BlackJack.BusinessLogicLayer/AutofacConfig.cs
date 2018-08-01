@@ -12,12 +12,12 @@ namespace BlackJack.BusinessLogicLayer
 {
     public static class AutofacConfig
     {
-        public  static void Configure(ContainerBuilder builder ) {
+        public  static void Configure(ContainerBuilder builder, string connectionString) {
             builder.RegisterType<GameService>().As<IGameService>();
             builder.RegisterType<GamePlayerService>().As<IGamePlayerService>();
             builder.RegisterType<PlayerService>().As<IPlayerService>();
             builder.RegisterType<CardService>().As<ICardService>();
-            DataAccess.AutofacConfig.Configure(builder);
+            DataAccess.AutofacConfig.Configure(builder, connectionString);
         }
     }
 }

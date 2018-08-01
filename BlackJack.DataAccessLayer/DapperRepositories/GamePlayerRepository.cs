@@ -5,31 +5,30 @@ using BlackJack.DataAccess.Iterfaces;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using Dapper;
+using Dapper.Contrib.Extensions;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BlackJack.DataAccess.DapperRepositories
 {
     public class GamePlayerRepository:IGamePlayerRepository
     {
-        private IDbConnection db = new SqlConnection("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = '|DataDirectory|\\MyDB.mdf'; Integrated Security = True");
+        private string _connectionString;
 
-        public GamePlayerRepository()
+        public GamePlayerRepository(string connectionString)
         {
-            db.Open();
+            _connectionString=connectionString;
         }
-
-        /*~GamePlayerRepository()
+                
+        public async Task DeleteGamePlayer(int id)
         {
-            db.Close();
-        }*/
-
-        public Task DeleteGamePlayer(int id)
-        {
-            //db.Open();
-            return db.ExecuteAsync("DELETE FROM GamePlayers WHERE Id=@Id", new { Id = id });
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("DELETE FROM GamePlayers WHERE Id=@Id", new { Id = id });
+            }
         }
 
         public Task<GamePlayer> GetGameDealerByGameId(int id)
@@ -37,48 +36,68 @@ namespace BlackJack.DataAccess.DapperRepositories
             throw new NotImplementedException();
         }
 
-        public Task<GamePlayer> GetGamePlayerById(int id)
+        public async Task<GamePlayer> GetGamePlayerById(int id)
         {
-            //db.Open();
-            return db.QueryFirstOrDefaultAsync<GamePlayer>("Select * From GamePlayers WHERE Id=@Id", new { Id = id }); 
+            GamePlayer gamePlayer = new GamePlayer();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                gamePlayer= await db.QueryFirstOrDefaultAsync<GamePlayer>("Select * From GamePlayers WHERE Id=@Id", new { Id = id });
+            }
+            return gamePlayer;
         }
 
-        public Task<IEnumerable<GamePlayer>> GetGamePlayers()
+        public async Task<IEnumerable<GamePlayer>> GetGamePlayers()
         {
-            //db.Open();
-            return db.QueryAsync<GamePlayer>("SELECT * FROM GamePlayers");
+            var result = new List<GamePlayer>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                 result=( await db.QueryAsync<GamePlayer>("SELECT * FROM GamePlayers")).ToList();
+            }
+            return result;
         }
 
-        public Task<IEnumerable<GamePlayer>> GetGamePlayersByGameId(int id)
+        public async Task<IEnumerable<GamePlayer>> GetGamePlayersByGameId(int id)
         {
-            //db.Open();
-            return db.QueryAsync<GamePlayer>("SELECT * FROM GamePlayers WHERE GameId=@Id", new { Id=id});
+            var result = new List<GamePlayer>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                 result= ( await db.QueryAsync<GamePlayer>("SELECT * FROM GamePlayers WHERE GameId=@Id", new { Id = id })).ToList();
+            }
+            return result;
         }
 
-        public Task<IEnumerable<GamePlayer>> GetGamePlayersWithoutDealerByGameId(int id)
+        public async Task<IEnumerable<GamePlayer>> GetGamePlayersWithoutDealerByGameId(int id)
         {
-            //db.Open();
-            return db.QueryAsync<GamePlayer>("SELECT gp.Id, gp.GameId, gp.PlayerId, gp.Result FROM GamePlayers gp, Players p WHERE gp.GameId=@Id AND p.RoleId!=@RoleId ;", new { Id = id, RoleId=Role.Dealer});
+            var result = new List<GamePlayer>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+              result=(await db.QueryAsync<GamePlayer>("SELECT gp.Id, gp.GameId, gp.PlayerId, gp.Result FROM GamePlayers gp, Players p WHERE gp.GameId=@Id AND p.RoleId!=@RoleId ;", new { Id = id, RoleId = Role.Dealer })).ToList();
+            }
+            return result;
         }
 
-        public Task InsertGamePlayer(GamePlayer player)
+        public async Task InsertGamePlayer(GamePlayer player)
         {
-            string sql = "INSERT INTO GamePlayers (GameId, PlayerId, Result) Values(@GameId, @PlayerId, @Result);";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { GameId=player.GameId, PlayerId=player.PlayerId, Result=player.Result });
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.InsertAsync<GamePlayer>(player);
+            }
         }
 
-        public Task Save()
+        public async Task Save()
         {
-            //db.Open();
-            return db.ExecuteAsync("COMMIT;");
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("COMMIT;");
+            }
         }
 
-        public Task UpdateGamePlayer(GamePlayer player)
-        {
-            string sql = "UPDATE GamePlayers SET GameId=@GameId, PlayerId=@PlayerId, Result=@Result WHERE Id=@Id;";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { Id = player.Id, GameId = player.GameId, PlayerId = player.PlayerId, Result = player.Result });
+        public async Task UpdateGamePlayer(GamePlayer player)
+        {          
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.UpdateAsync(player);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using Autofac.Integration.Mvc;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.BusinessLogic.Services;
 using BlackJack.BusinessLogicLayer;
+using System.Configuration;
 
 namespace BlackJackFilenko
 {
@@ -23,7 +24,8 @@ namespace BlackJackFilenko
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            AutofacConfig.Configure(builder);
+            string connectionString = ConfigurationManager.ConnectionStrings["BlackJackDb"].ConnectionString;
+            AutofacConfig.Configure(builder, connectionString);            
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }

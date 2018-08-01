@@ -16,12 +16,10 @@ namespace BlackJack.BusinessLogic.Services
     public class CardService : ICardService
     {
         private Random _rnd;
-        //BlackJackContext _context;
         ICardRepository _cardRepository;
 
         public CardService(ICardRepository cardRepository) {
             _rnd = new Random();
-            //_context = new BlackJackContext();
             _cardRepository = cardRepository;
         }
         public async Task Add(AddCardViewModel addCard)

@@ -37,10 +37,10 @@ namespace BlackJack.DataAccess.EntityFrameworkRepository
             return await _context.Games.FindAsync(id);
         }
 
-        public async Task InsertGame(Game game)
+        public async Task<int> InsertGame(Game game)
         {
             _context.Games.Add(game);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
         public async Task Save()

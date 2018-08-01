@@ -14,13 +14,11 @@ using BlackJack.DataAccess.DapperRepositories;
 namespace BlackJack.BusinessLogic.Services
 {
     public class GamePlayerService : IGamePlayerService
-    {
-        //private BlackJackContext _context;
+    {       
         private IGamePlayerRepository _gamePlayerRepository;
         private IPlayerRepository _playerRepository;
 
-        public GamePlayerService( IGamePlayerRepository gamePlayerRepository, IPlayerRepository playerRepository) {
-            //_context = new BlackJackContext();
+        public GamePlayerService( IGamePlayerRepository gamePlayerRepository, IPlayerRepository playerRepository) {            
             _gamePlayerRepository = gamePlayerRepository;
             _playerRepository = playerRepository;
         }
@@ -37,7 +35,7 @@ namespace BlackJack.BusinessLogic.Services
                 showGamePlayer.PlayerId = player.Id;
                 showGamePlayer.GameId = gp.GameId;
                 showGamePlayer.Name = player.Name;
-                showGamePlayer.Points = player.Points;
+                showGamePlayer.Points = gp.Points;
                 showGamePlayer.Result = gp.Result;
                 showGamePlayers.Add(showGamePlayer);               
             }
@@ -59,7 +57,7 @@ namespace BlackJack.BusinessLogic.Services
                     showGamePlayer.PlayerId = player.Id;
                     showGamePlayer.GameId = gp.GameId;
                     showGamePlayer.Name = player.Name;
-                    showGamePlayer.Points = player.Points;
+                    showGamePlayer.Points = gp.Points;
                     showGamePlayer.Result = gp.Result;
                     showGamePlayers.Add(showGamePlayer);
                 }
@@ -81,9 +79,8 @@ namespace BlackJack.BusinessLogic.Services
                     dealer.PlayerId = player.Id;
                     dealer.GameId = gp.GameId;
                     dealer.Name = player.Name;
-                    dealer.Points = player.Points;
-                    dealer.Result = gp.Result;
-                    
+                    dealer.Points = gp.Points;
+                    dealer.Result = gp.Result;                    
                 }
             }
             return dealer;
@@ -98,7 +95,7 @@ namespace BlackJack.BusinessLogic.Services
             showGamePlayer.PlayerId = player.Id;
             showGamePlayer.GameId = gamePlayer.GameId;
             showGamePlayer.Name = player.Name;
-            showGamePlayer.Points = player.Points;
+            showGamePlayer.Points = gamePlayer.Points;
             showGamePlayer.Result = gamePlayer.Result;
             return showGamePlayer;
         }

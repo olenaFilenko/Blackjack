@@ -5,62 +5,77 @@ using BlackJack.DataAccess.Iterfaces;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using Dapper;
+using Dapper.Contrib.Extensions;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BlackJack.DataAccess.DapperRepositories
 {
     public class CardRepository : ICardRepository
     {
-        private IDbConnection db = new SqlConnection("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = '|DataDirectory|\\MyDB.mdf'; Integrated Security = True");
-
-        public CardRepository()
+        private string _connectionString;
+        
+        public CardRepository(string connectionString)
         {
-            db.Open();
+            _connectionString = connectionString;
         }
-        /*~CardRepository()
+        
+        public async Task DeleteCard(int id)
         {
-            db.Close();
-        }*/
-
-        public Task DeleteCard(int id)
-        {
-            //db.Open();
-            return db.ExecuteAsync("DELETE FROM Cards WHERE Id=@Id", new { Id = id });
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("DELETE FROM Cards WHERE Id=@Id", new { Id = id });
+            } 
         }
 
-        public Task<Card> GetCardById(int id)
+        public async Task<Card> GetCardById(int id)
         {
-            //db.Open();
-            return db.QueryFirstOrDefaultAsync<Card>("Select * From Cards WHERE Id=@Id", new { Id = id });
+            Card card = new Card();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+               card= await db.QueryFirstOrDefaultAsync<Card>("Select * From Cards WHERE Id=@Id", new { Id = id });
+            }
+            return card;
         }
 
-        public Task<IEnumerable<Card>> GetCards()
+        public async Task<IEnumerable<Card>> GetCards()
         {
-            //db.Open();
-            return db.QueryAsync<Card>("SELECT * FROM Cards");
+            var cards = new List<Card>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                cards=(await db.QueryAsync<Card>("SELECT * FROM Cards")).ToList();
+            }
+            return cards;
         }
 
-        public Task InsertCard(Card card)
+        public async Task InsertCard(Card card)
         {
-            string sql = "INSERT INTO Cards ( Name, Value) Values(@Name, @Value);";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { Name =card.Name, Value=card.Value});
+            //string sql = "INSERT INTO Cards ( Name, Value) Values(@Name, @Value);";
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                //await db.QueryAsync(sql, new {Name=card.Name, Value=card.Value });
+                await db.InsertAsync(card);
+            }                
         }
 
-        public Task Save()
+        public async Task Save()
         {
-            //db.Open();
-            return db.ExecuteAsync("COMMIT;");
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("COMMIT;");
+            }                
         }
 
-        public Task UpdateCard(Card card)
+        public async Task UpdateCard(Card card)
         {
-            string sql = "UPDATE Cards SET Name=@Name, Value=@Value WHERE Id=@Id;";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { Name = card.Name, Value = card.Value, Id = card.Id });
+           // string sql = "UPDATE Cards SET Name=@Name, Value=@Value WHERE Id=@Id;";
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.UpdateAsync(card);
+            }                
         }
     }
 }

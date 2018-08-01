@@ -12,11 +12,11 @@ namespace BlackJack.DataAccess
 {
     public static class AutofacConfig
     {
-        public static void Configure(ContainerBuilder builder) {
-            builder.RegisterType<CardRepository>().As<ICardRepository>();
-            builder.RegisterType<GameRepository>().As<IGameRepository>();
-            builder.RegisterType<GamePlayerRepository>().As<IGamePlayerRepository>();
-            builder.RegisterType<PlayerRepository>().As<IPlayerRepository>();
+        public static void Configure(ContainerBuilder builder, string connectionString) {
+            builder.RegisterType<CardRepository>().As<ICardRepository>().WithParameter("connectionString", connectionString);
+            builder.RegisterType<GameRepository>().As<IGameRepository>().WithParameter("connectionString", connectionString);
+            builder.RegisterType<GamePlayerRepository>().As<IGamePlayerRepository>().WithParameter("connectionString", connectionString);
+            builder.RegisterType<PlayerRepository>().As<IPlayerRepository>().WithParameter("connectionString", connectionString);
         }
     }
 }

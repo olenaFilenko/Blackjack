@@ -9,59 +9,71 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Dapper.Contrib.Extensions;
+using System.Linq;
 
 namespace BlackJack.DataAccess.DapperRepositories
 {
     public class GameRepository : IGameRepository
-    {
-        private IDbConnection db = new SqlConnection("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = '|DataDirectory|\\MyDB.mdf'; Integrated Security = True");
+    {        
+        private string _connectionString;
 
-        public GameRepository()
+        public GameRepository(string connectionString)
         {
-            db.Open();
+           _connectionString= connectionString;
+        }              
+
+        public async Task DeleteGame(int id)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("DELETE FROM Games WHERE Id=@Id", new { Id = id });
+            }                
         }
 
-        /*~GameRepository()
+        public async Task<Game> GetGameById(int id)
         {
-            db.Close();
-        }*/
-
-        public Task DeleteGame(int id)
-        {
-            //db.Open();
-            return db.ExecuteAsync("DELETE FROM Games WHERE Id=@Id", new { Id = id });
+            Game game = new Game();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                 game= await db.QueryFirstOrDefaultAsync<Game>("Select * From Games WHERE Id=@Id", new { Id = id });
+            }
+            return game;
         }
 
-        public Task<Game> GetGameById(int id)
+        public async Task<IEnumerable<Game>> GetGames()
         {
-            //db.Open();
-            return db.QueryFirstOrDefaultAsync<Game>("Select * From Games WHERE Id=@Id", new { Id = id }); ;
+            var result = new List<Game>();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                 result=(await db.QueryAsync<Game>("SELECT * FROM Games")).ToList();
+            }
+            return result;
         }
 
-        public Task<IEnumerable<Game>> GetGames()
+        public async Task<int> InsertGame(Game game)
         {
-            //db.Open();
-            return db.QueryAsync<Game>("SELECT * FROM Games");
+            int result =-1;
+            using (SqlConnection db = new SqlConnection(_connectionString))
+            {
+                result= await db.InsertAsync<Game>(game);
+            }
+            return result;
         }
 
-        public Task InsertGame(Game game)
+        public async Task Save()
         {
-            string sql = "INSERT INTO Games (Name, SetParametrsStatus) Values(@Name, @SetParametrsStatus);";
-            //db.Open();
-            return db.ExecuteAsync(sql, new { Name=game.Name , SetParametrsStatus =game.SetParametrsStatus});
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.ExecuteAsync("COMMIT;");
+            }
         }
 
-        public Task Save()
-        {
-            //db.Open();
-            return db.ExecuteAsync("COMMIT;");
-        }
-
-        public Task UpdateGame(Game game)
-        {
-            string sql = "UPDATE Games SET Name=@Name, SetParametrsStatus=@SetParametrsStatus WHERE Id=@Id;";
-            //db.Open();
-            return db.ExecuteAsync(sql, new {Id = game.Id , Name=game.Name , SetParametrsStatus =game.SetParametrsStatus});
+        public async Task UpdateGame(Game game)
+        {           
+            using (IDbConnection db = new SqlConnection(_connectionString)) {
+               await db.UpdateAsync(game);
+            }            
         }
     }
 }

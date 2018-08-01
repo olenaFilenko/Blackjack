@@ -12,7 +12,7 @@ namespace BlackJack.DataAccess.Iterfaces
     {
         Task<IEnumerable<Game>> GetGames();
         Task<Game> GetGameById(int id);
-        Task InsertGame(Game game);
+        Task<int> InsertGame(Game game);
         Task DeleteGame(int id);
         Task UpdateGame(Game game);
         Task Save();

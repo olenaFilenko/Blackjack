@@ -2,10 +2,10 @@
 @using BlackJack.ViewModels
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Game results";
 }
 
-<h2>Details</h2>
+<h2>Game results</h2>
 
 <div>
     <dl class="dl-horizontal">
@@ -17,54 +17,7 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
-    <table class="table">
-        <tr>
-            <td>
-                @using (Html.BeginForm("StartFirstGameRound", "Game", new { gameId = Model.Id }))
-                {
-                    <input type="submit" value="StartFirstGameRound" class="btn btn-default" />
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("More", "Game", new {gameId = Model.Id}))
-                {
-                    <input type="submit" value="More" class="btn btn-default" />
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("Enough", "Game", new {gameId = Model.Id }))
-                {
-                    <input type="submit" value="Enough" class="btn btn-default" />
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("FinishRound", "Game", new { id = Model.Id }))
-                {
-                    <input type="submit" value="Finish round" class="btn btn-default" />
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("CalculateResult", "Game", new { gameId = Model.Id }))
-                {
-                    <input type="submit" value="Calculate results" class="btn btn-default" />
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("CloseGame", "Game", new { id = Model.Id }))
-                {
-                    <input type="submit" value="Close game" class="btn btn-default" />
-                }
-            </td>
-        </tr>
-    </table>
-   
-
-   
-
-   
-
     
-
 </div>
 
 <div>
@@ -74,18 +27,18 @@
 
 <div>
     <table class="table">
+        <tr>
+            <td>Player: </td>
+            <td>Players's points: </td>
+            <td>Result:</td>
+        </tr>
         @foreach (var item in ViewBag.Players)
         {
-            <tr>
-                <td>
-                    <label>Player: </label> @item.Name
-                    <br />
-                    <label>Players's points: </label>@item.Points
-                    <br />
-                    <label>Result: </label> @item.Result
-                    <br />
-                </td>
-            </tr>
+        <tr>
+            <td>@item.Name</td>
+            <td> @item.Points</td>
+            <td> @item.Result</td>
+        </tr>
         }
     </table>
 </div>

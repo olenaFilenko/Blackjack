@@ -15,19 +15,16 @@ namespace BlackJack.BusinessLogic.Services
 {
     public class PlayerService : IPlayerService
     {
-        private IPlayerRepository _playerRepository;
-        //private BlackJackContext _context;
+        private IPlayerRepository _playerRepository;        
 
-        public PlayerService(IPlayerRepository playerRepository) {
-            //_context = new BlackJackContext();
+        public PlayerService(IPlayerRepository playerRepository) {           
             _playerRepository = playerRepository;
         }
 
         public async Task AddBot(AddPlayerViewModel addPlayerViewModel)
         {
             Player player = new Player();
-            player.Name = addPlayerViewModel.Name;
-            player.Points = 0;
+            player.Name = addPlayerViewModel.Name;            
             player.RoleId = Role.Bot;
             await _playerRepository.InsertPlayer(player);
         }
@@ -35,8 +32,7 @@ namespace BlackJack.BusinessLogic.Services
         public async Task AddDealer(AddPlayerViewModel addPlayerViewModel)
         {
             Player player = new Player();
-            player.Name = addPlayerViewModel.Name;
-            player.Points = 0;
+            player.Name = addPlayerViewModel.Name;           
             player.RoleId = Role.Dealer;
             await _playerRepository.InsertPlayer(player);
         }
@@ -45,7 +41,6 @@ namespace BlackJack.BusinessLogic.Services
         {
             Player player = new Player();
             player.Name = addPlayerViewModel.Name;
-            player.Points = 0;
             player.RoleId = Role.Player;
             await _playerRepository.InsertPlayer(player);
 
@@ -62,7 +57,6 @@ namespace BlackJack.BusinessLogic.Services
                     GetAllBotsViewModel allBotsItem = new GetAllBotsViewModel();
                     allBotsItem.Id = pl.Id;
                     allBotsItem.Name = pl.Name;
-                    allBotsItem.Points = pl.Points;
                     allBots.Add(allBotsItem);
                 }
             }
@@ -80,7 +74,6 @@ namespace BlackJack.BusinessLogic.Services
                     GetAllDealersViewModel allDealerItem = new GetAllDealersViewModel();
                     allDealerItem.Id = pl.Id;
                     allDealerItem.Name = pl.Name;
-                    allDealerItem.Points = pl.Points;
                     allDealers.Add(allDealerItem);
                 }
             }
@@ -98,7 +91,6 @@ namespace BlackJack.BusinessLogic.Services
                     GetAllPlayersViewModel allPlayer = new GetAllPlayersViewModel();
                     allPlayer.Id = pl.Id;
                     allPlayer.Name = pl.Name;
-                    allPlayer.Points = pl.Points;
                     allPlayers.Add(allPlayer);
                 }
             }
@@ -111,7 +103,6 @@ namespace BlackJack.BusinessLogic.Services
             Player pl = await _playerRepository.GetPlayerById(id);
             player.Id = pl.Id;
             player.Name = pl.Name;
-            player.Points = pl.Points;
             return player;
         }
 
@@ -131,7 +122,6 @@ namespace BlackJack.BusinessLogic.Services
             Player player = await _playerRepository.GetPlayerById(id);
             updatePlayer.Id = player.Id;
             updatePlayer.Name = player.Name;
-            updatePlayer.Points = player.Points;
             return updatePlayer;
         }
 
@@ -140,7 +130,6 @@ namespace BlackJack.BusinessLogic.Services
             Player player = await _playerRepository.GetPlayerById(updatePlayerViewModel.Id);
             player.Id = updatePlayerViewModel.Id;
             player.Name = updatePlayerViewModel.Name;
-            player.Points = updatePlayerViewModel.Points;
             //player.RoleId = Role.Player;
             await _playerRepository.UpdatePlayer(player);
         }

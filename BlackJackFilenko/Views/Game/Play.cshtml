@@ -1,4 +1,5 @@
-﻿@model BlackJack.ViewModels.GameServiceViewModels.ShowGameViewModel
+﻿@model BlackJack.ViewModels.GameServiceViewModels.PlayGameView
+@using BlackJack.ViewModels.GameServiceViewModels
 
 @{
     ViewBag.Title = "Play";
@@ -16,48 +17,46 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
+
     </dl>
+</div>
+<div>
+
+    @using (Html.BeginForm("More", "Game", new { gameId = Model.Id }))
+    {
+        <input type="submit" value="More" class="btn btn-default" />
+    }
+    @using (Html.BeginForm("Enough", "Game", new { gameId = Model.Id }))
+    {
+        <input type="submit" value="Enough" class="btn btn-default" />
+    }
+
+</div>
+<div>
     <table class="table">
         <tr>
-
-            <td>
-                @using (Html.BeginForm("More", "Game", new { gameId = Model.Id }))
-                {
-                    <input type="submit" value="More" class="btn btn-default" />
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("Enough", "Game", new { gameId = Model.Id }))
-                {
-                    <input type="submit" value="Enough" class="btn btn-default" />
-                }
-            </td>
+            <td>@Html.DisplayNameFor(model => model.Dealer)</td>
+            <td>@Model.Dealer.Name</td>
+            <td>@Model.Dealer.Points</td>
         </tr>
-    </table>
-</div>
-<div>
-    <label>Dealer: </label>  @ViewBag.Dealer.Name <br />
-    <label>Dealer's points: </label> @ViewBag.Dealer.Points
-</div>
-
-<div>
-    <table class="table">
-        @foreach (var item in ViewBag.Players)
+        <tr>
+            <td>Player</td>
+            <td>Players points </td>
+            <td>Game result</td>
+        </tr>
+        @foreach (GamePlayerPlayGameViewItem player in Model.Players)
         {
             <tr>
-                <td>
-                    <label>Player: </label> @item.Name
-                    <br />
-                    <label>Players's points: </label>@item.Points
-                    <br />
-                    <label>Result: </label> @item.Result
-                    <br />
-                </td>
+                <td>@player.Name</td>
+                <td>@player.Points</td>
+                <td>@player.Result</td>
             </tr>
         }
     </table>
 </div>
+@section Scripts {
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

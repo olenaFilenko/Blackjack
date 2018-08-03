@@ -58,9 +58,16 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.7\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -159,11 +166,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\BotController.cs" />
-    <Compile Include="Controllers\CardController.cs" />
-    <Compile Include="Controllers\DealerController.cs" />
     <Compile Include="Controllers\GameController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -188,12 +191,21 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\GameScripts\EnoughClickRemoveScript.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -210,33 +222,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Card\Index.cshtml" />
-    <Content Include="Views\Card\Add.cshtml" />
-    <Content Include="Views\Card\Delete.cshtml" />
-    <Content Include="Views\Card\Show.cshtml" />
-    <Content Include="Views\Card\Edit.cshtml" />
-    <Content Include="Views\Bot\Index.cshtml" />
-    <Content Include="Views\Bot\Add.cshtml" />
-    <Content Include="Views\Bot\Update.cshtml" />
     <Content Include="Views\Game\Index.cshtml" />
-    <Content Include="Views\Game\StartGame.cshtml" />
-    <Content Include="Views\Bot\Delete.cshtml" />
-    <Content Include="Views\Bot\Show.cshtml" />
-    <Content Include="Views\Dealer\Index.cshtml" />
-    <Content Include="Views\Dealer\Add.cshtml" />
-    <Content Include="Views\Dealer\Show.cshtml" />
-    <Content Include="Views\Dealer\Update.cshtml" />
-    <Content Include="Views\Dealer\Delete.cshtml" />
-    <Content Include="Views\Player\Index.cshtml" />
-    <Content Include="Views\Player\Add.cshtml" />
-    <Content Include="Views\Player\Show.cshtml" />
-    <Content Include="Views\Player\Update.cshtml" />
-    <Content Include="Views\Player\Delete.cshtml" />
-    <Content Include="Views\Game\Details.cshtml" />
     <Content Include="Views\Game\Play.cshtml" />
+    <Content Include="Views\Game\History.cshtml" />
+    <Content Include="Views\Game\Details.cshtml" />
+    <Content Include="Views\Game\Start.cshtml" />
+    <Content Include="Views\Player\Add.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

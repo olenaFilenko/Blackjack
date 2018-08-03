@@ -1,5 +1,5 @@
-﻿@model BlackJack.ViewModels.GameServiceViewModels.ShowGameViewModel
-@using BlackJack.ViewModels
+﻿@model BlackJack.ViewModels.GameServiceViewModels.DetailsGameView
+@using BlackJack.ViewModels.GameServiceViewModels
 
 @{
     ViewBag.Title = "Game results";
@@ -8,6 +8,7 @@
 <h2>Game results</h2>
 
 <div>
+    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -17,32 +18,36 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
-    
 </div>
-
-<div>
-    <label>Dealer: </label>  @ViewBag.Dealer.Name <br/>
-    <label>Dealer's points: </label> @ViewBag.Dealer.Points
-</div>
-
 <div>
     <table class="table">
         <tr>
-            <td>Player: </td>
-            <td>Players's points: </td>
-            <td>Result:</td>
+            <td>@Html.DisplayNameFor(model => model.Dealer)</td>
+            <td>@Html.DisplayFor(model=>model.Dealer.Name)</td>
+            <td>@Html.DisplayFor(model=>model.Dealer.Points)</td>
         </tr>
-        @foreach (var item in ViewBag.Players)
-        {
+    </table>
+    <dl>
+        <dt></dt>
+        <dd></dd>
+    </dl>
+</div>
+<div>
+    <table class="table">
         <tr>
-            <td>@item.Name</td>
-            <td> @item.Points</td>
-            <td> @item.Result</td>
+            <td>Player</td>
+            <td>Playres points</td>
+            <td>Players result</td>
+        </tr>
+        @foreach (GamePlayerDetailsGameViewItem gp in Model.Players) {
+        <tr>
+            <td>@gp.Name</td>
+            <td>@gp.Points</td>
+            <td>@gp.Result</td>
         </tr>
         }
     </table>
 </div>
-
 <p>
-       @Html.ActionLink("Back to List", "Index")
+   @Html.ActionLink("Back to games history", "History")
 </p>

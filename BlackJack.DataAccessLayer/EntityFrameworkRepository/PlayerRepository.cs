@@ -7,7 +7,7 @@ using BlackJack.Entities.Models;
 using System.Data.Entity;
 using BlackJack.DataAccess.EntityFrameworkRepository;
 using System.Threading.Tasks;
-using BlackJack.DataAccess.Iterfaces;
+using BlackJack.DataAccess.Interfaces;
 
 namespace BlackJack.DataAccess.EntityFrameworkRepository
 {
@@ -91,6 +91,31 @@ namespace BlackJack.DataAccess.EntityFrameworkRepository
         {
             var pl = await(from p in _context.Players where p.RoleId == Role.Bot select p).ToListAsync();
             return pl;
+        }
+
+        public Task<IEnumerable<Player>> All()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Player> GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Delete(Player entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> Add(Player entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(Player entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,36 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BlackJack.BusinessLogic.Interfaces;
-using BlackJack.DataAccess.Iterfaces;
-//using BlackJack.DataAccess.EntityFrameworkRepository;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using BlackJack.ViewModels.GameServiceViewModels;
-using BlackJack.ViewModels.CardServiceViewModel;
-using BlackJack.ViewModels.GamePlayerServiceViewModels;
-using BlackJack.ViewModels.PlayerServiceViewModels;
-using BlackJack.DataAccess.DapperRepositories;
-using BalackJack.Entities.Enums;
+using BlackJack.DataAccess.Interfaces;
 
 namespace BlackJack.BusinessLogic.Services
 {
     public class GameService : IGameService
-    {        
-        private IGameRepository _gameRepository;
-        private IGamePlayerRepository _gamePlayerRepository;
-        private IPlayerRepository _playerRepository;
-        private ICardRepository _cardRepository;
-        private Random _rnd;
+    {   
+        private static Random _rnd = new Random();
         
-        public GameService(IGameRepository gameRepository, IGamePlayerRepository gamePlayerRepository, IPlayerRepository playerRepository, ICardRepository cardRepository) {            
+        private IGenericRepository<Game> _gameRepository;
+        private IPlayerRepository _playerRepository;
+        private IGamePlayerRepository _gamePlayerRepository;
+        //private IGenericRepository<GamePlayer> _gamePlayerRepository;
+        //private IGenericRepository<Player> _playerRepository;
+        private IGenericRepository<Card> _cardRepository;
+        
+
+        
+        public GameService(IGenericRepository<Game> gameRepository, IGamePlayerRepository gamePlayerRepository,
+            IPlayerRepository playerRepository, IGenericRepository<Card> cardRepository)
+        {            
             _gameRepository = gameRepository;
             _gamePlayerRepository = gamePlayerRepository;
             _playerRepository = playerRepository;
             _cardRepository= cardRepository;
-            _rnd = new Random();
         }
         
         public async Task CheckGameRoundResults(int id)
@@ -38,18 +37,13 @@ namespace BlackJack.BusinessLogic.Services
             var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
             foreach(GamePlayer gp in gamePlayers)
             {
-                Player player = await _playerRepository.GetPlayerById(gp.PlayerId);
+                Player player = await _playerRepository.GetById(gp.PlayerId);
                 if (player.RoleId != Role.Dealer)
                 {
-                    if (gp.Points == 21 && string.IsNullOrEmpty(gp.Result)) gp.Result += "BlackJack";
+                    if (gp.Points == 21 && string.IsNullOrEmpty(gp.Result)) gp.Result += "BlackJack ";
                 }
-                await _gamePlayerRepository.UpdateGamePlayer(gp);
+                await _gamePlayerRepository.Update(gp);
             }
-        }
-
-        public async Task Delete(int id)
-        {
-            await _gameRepository.DeleteGame(id);
         }
 
         public async Task Enough(int id)
@@ -58,7 +52,7 @@ namespace BlackJack.BusinessLogic.Services
             GamePlayer dealer = new GamePlayer();
             foreach(GamePlayer gp in gamePlayers)
             {
-                Player player = await _playerRepository.GetPlayerById(gp.PlayerId);
+                Player player = await _playerRepository.GetById(gp.PlayerId);
                 if (player.RoleId == Role.Dealer)
                 {
                     dealer = gp;
@@ -66,7 +60,7 @@ namespace BlackJack.BusinessLogic.Services
                 else
                 {
                     gp.Result += "Enough";
-                    await _gamePlayerRepository.UpdateGamePlayer(gp);
+                    await _gamePlayerRepository.Update(gp);
                 }
             }
             Card card = new Card();
@@ -74,15 +68,24 @@ namespace BlackJack.BusinessLogic.Services
             {
                 card = await PassCard();
                 await StartGameRound(dealer.Id, card);
-                dealer= await _gamePlayerRepository.GetGamePlayerById(dealer.Id);
+                dealer= await _gamePlayerRepository.GetById(dealer.Id);
             }
+            await CheckGameRoundResults(id);
+            await FinishGame(id);
         }
 
-        public async Task FinishGame(ShowGameViewModel showGame)
+        private async Task FinishGame(int id)
         {
-            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(showGame.Id);
-            GamePlayer dealer =( from gp in gamePlayers where gp.PlayerId == showGame.DealerId select gp).FirstOrDefault();
+            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
+            List<GamePlayer> players = new List<GamePlayer>();
+            GamePlayer dealer = new GamePlayer();
             foreach(GamePlayer gp in gamePlayers)
+            {
+                Player player = await _playerRepository.GetById(gp.PlayerId);
+                if (player.RoleId != Role.Dealer) players.Add(gp);
+                else dealer = gp;
+            }
+            foreach(GamePlayer gp in players)
             {
                 if (gp.Id == dealer.Id) continue;
                 else
@@ -106,117 +109,14 @@ namespace BlackJack.BusinessLogic.Services
                         else gp.Result += " You lost";
                     }
                     
-                    await _gamePlayerRepository.UpdateGamePlayer(gp);
+                    await _gamePlayerRepository.Update(gp);
                 }                
             }
         }
-       
-        public async Task<IEnumerable<GetAllDealersViewModel>> GetAllDealers()
+
+        private async Task StartFirstGameRound(int id)
         {
-            List<GetAllDealersViewModel> allDealers = new List<GetAllDealersViewModel>();
-            var players = await _playerRepository.GetAllPlayers();
-            foreach (Player pl in players)
-            {
-                if (pl.RoleId.Equals(Role.Dealer))
-                {
-                    GetAllDealersViewModel allDealerItem = new GetAllDealersViewModel();
-                    allDealerItem.Id = pl.Id;
-                    allDealerItem.Name = pl.Name;
-                    allDealers.Add(allDealerItem);
-                }
-            }
-            return allDealers;
-        }
-
-        public async Task<IEnumerable<GetAllGamesViewModel>> GetAllGames()
-        {
-            List<GetAllGamesViewModel> allGames = new List<GetAllGamesViewModel>();
-            var games = await _gameRepository.GetGames();
-            foreach (Game g in games)
-            {
-                GetAllGamesViewModel allGamesItem = new GetAllGamesViewModel();
-                var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(g.Id);
-                allGamesItem.Id = g.Id;
-                allGamesItem.Name = g.Name;
-                allGamesItem.BotsNumber = 0;
-                foreach (GamePlayer gp in gamePlayers)
-                {
-                    Player p = await _playerRepository.GetPlayerById(gp.PlayerId);
-                    if (p.RoleId.Equals(Role.Player))
-                    {
-                        allGamesItem.Player = p.Name;
-                    }
-                    else
-                    {
-                        if (p.RoleId.Equals(Role.Dealer))
-                        {
-                            allGamesItem.Dealer = p.Name;
-                        }
-                        else allGamesItem.BotsNumber += 1;
-                    }
-
-                }
-                allGames.Add(allGamesItem);
-            }
-            return allGames;
-
-        }
-
-        public async Task<IEnumerable<GetAllPlayersViewModel>> GetAllPlayers()
-        {
-            List<GetAllPlayersViewModel> allPlayers = new List<GetAllPlayersViewModel>();
-            var players = await _playerRepository.GetPlayers();
-            foreach (Player pl in players)
-            {
-                if (pl.RoleId.Equals(Role.Player))
-                {
-                    GetAllPlayersViewModel allPlayer = new GetAllPlayersViewModel();
-                    allPlayer.Id = pl.Id;
-                    allPlayer.Name = pl.Name;
-                    allPlayers.Add(allPlayer);
-                }
-            }
-            return allPlayers;
-        }
-
-        public async Task Save()
-        {
-            await _gameRepository.Save();
-            await _gamePlayerRepository.Save();
-        }
-
-        public async Task<ShowGameViewModel> ShowGame(int id)
-        {
-            ShowGameViewModel showGame = new ShowGameViewModel();
-            Game game = await _gameRepository.GetGameById(id);
-            showGame.Id = game.Id;
-            showGame.Name = game.Name;
-            GetAllGamesViewModel allGamesItem = new GetAllGamesViewModel();
-            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
-
-            foreach (GamePlayer gp in gamePlayers)
-            {
-                Player p = await _playerRepository.GetPlayerById(gp.PlayerId);
-                if (p.RoleId.Equals(Role.Player))
-                {
-                    showGame.PlayerId = p.Id;
-                }
-                else
-                {
-                    if (p.RoleId.Equals(Role.Dealer))
-                    {
-                        showGame.DealerId = p.Id;
-                    }
-                    else showGame.BotsNumber += 1;
-                }
-            }
-            
-            return showGame;
-        }
-
-        public async Task StartFirstGameRound(int id)
-        {
-            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
+            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId( id);
             foreach(GamePlayer gp in gamePlayers)
             {
                 Card card1 = await PassCard();
@@ -226,43 +126,10 @@ namespace BlackJack.BusinessLogic.Services
             }
             await CheckGameRoundResults(id);
         }
-
-        public async Task<int> StartGame(StartGameViewModel startGame)
-        {
-            Game game = new Game();
-            game.Name = startGame.Name;            
-            int gameId= await _gameRepository.InsertGame(game);
-            GamePlayer gamePlayer = new GamePlayer();
-            GamePlayer gameDealer = new GamePlayer();
-            gamePlayer.PlayerId = startGame.PlayerId;
-            gamePlayer.GameId = gameId;
-            gamePlayer.Points = 0;
-            gamePlayer.Result = string.Empty;
-            gameDealer.PlayerId = startGame.DealerId;
-            gameDealer.GameId = gameId;
-            gameDealer.Points = 0;
-            gameDealer.Result = string.Empty;
-            await _gamePlayerRepository.InsertGamePlayer(gamePlayer);
-            await _gamePlayerRepository.InsertGamePlayer(gameDealer);
-            var bots = await _playerRepository.GetBots();
-            int botNumberCounter = 0;
-            foreach (Player bot in bots)
-            {
-                if (botNumberCounter >= startGame.BotsNumber) break;
-                GamePlayer gameBot = new GamePlayer();
-                gameBot.PlayerId = bot.Id;
-                gameBot.GameId = gameId;
-                gameBot.Points = 0;
-                gameBot.Result = string.Empty;
-                await _gamePlayerRepository.InsertGamePlayer(gameBot);
-                botNumberCounter++;
-            }
-            return gameId;
-        }
-
-        public async Task StartGameRound(int gamePlayerId, Card passCard)
+        
+        private async Task StartGameRound(int gamePlayerId, Card passCard)
         { 
-            GamePlayer gamePlayer = await _gamePlayerRepository.GetGamePlayerById(gamePlayerId);
+            GamePlayer gamePlayer = await _gamePlayerRepository.GetById(gamePlayerId );
             if (string.IsNullOrEmpty(gamePlayer.Result))
             {
                 if (gamePlayer.Points <= 21)
@@ -281,13 +148,13 @@ namespace BlackJack.BusinessLogic.Services
                     }
                 }
             }
-            await _gamePlayerRepository.UpdateGamePlayer(gamePlayer);
+            await _gamePlayerRepository.Update(gamePlayer);
             
         }
 
-        public async Task<Card> PassCard()
+        private async Task<Card> PassCard()
         {
-            var cards = await _cardRepository.GetCards();
+            var cards = await _cardRepository.All();
             int cardNumber = cards.Count<Card>();
             Card[] cardDeck = new Card[cardNumber];
             int i = 0;
@@ -301,74 +168,13 @@ namespace BlackJack.BusinessLogic.Services
             return card;
         }
 
-        public async Task<IEnumerable<ShowGamePlayerViewModel>> GetAllGamePlayersByGameId(int id)
-        {
-            List<ShowGamePlayerViewModel> showGamePlayers = new List<ShowGamePlayerViewModel>();
-            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
-            foreach (GamePlayer gp in gamePlayers)
-            {
-                Player player = await _playerRepository.GetPlayerById(gp.PlayerId);
-                ShowGamePlayerViewModel showGamePlayer = new ShowGamePlayerViewModel();
-                showGamePlayer.Id = gp.Id;
-                showGamePlayer.PlayerId = player.Id;
-                showGamePlayer.GameId = gp.GameId;
-                showGamePlayer.Name = player.Name;
-                showGamePlayer.Points = gp.Points;
-                showGamePlayer.Result = gp.Result;
-                showGamePlayers.Add(showGamePlayer);
-            }
-            return showGamePlayers;
-        }
-
-        public async Task<IEnumerable<ShowGamePlayerViewModel>> GetAllGamePlayersWithoutDealerByGameId(int id)
-        {
-            List<ShowGamePlayerViewModel> showGamePlayers = new List<ShowGamePlayerViewModel>();
-            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
-            foreach (GamePlayer gp in gamePlayers)
-            {
-                Player player = await _playerRepository.GetPlayerById(gp.PlayerId);
-                if (player.RoleId != Role.Dealer)
-                {
-                    ShowGamePlayerViewModel showGamePlayer = new ShowGamePlayerViewModel();
-                    showGamePlayer.Id = gp.Id;
-                    showGamePlayer.PlayerId = player.Id;
-                    showGamePlayer.GameId = gp.GameId;
-                    showGamePlayer.Name = player.Name;
-                    showGamePlayer.Points = gp.Points;
-                    showGamePlayer.Result = gp.Result;
-                    showGamePlayers.Add(showGamePlayer);
-                }
-            }
-            return showGamePlayers;
-        }
-
-        public async Task<ShowGamePlayerViewModel> GetGameDealerByGameId(int id)
-        {
-            ShowGamePlayerViewModel dealer = new ShowGamePlayerViewModel();
-            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
-            foreach (GamePlayer gp in gamePlayers)
-            {
-                Player player = await _playerRepository.GetPlayerById(gp.PlayerId);
-                if (player.RoleId == Role.Dealer)
-                {
-                    dealer.Id = gp.Id;
-                    dealer.PlayerId = player.Id;
-                    dealer.GameId = gp.GameId;
-                    dealer.Name = player.Name;
-                    dealer.Points = gp.Points;
-                    dealer.Result = gp.Result;
-                }
-            }
-            return dealer;
-        }
-
         public async Task More(int id)
         {
-            List<GamePlayer> showGamePlayers = new List<GamePlayer>();
+            List<GamePlayer> listGamePlayers = new List<GamePlayer>();
             var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
             foreach (GamePlayer gp in gamePlayers)
             {
-                Player player = await _playerRepository.GetPlayerById(gp.PlayerId);
+                Player player = await _playerRepository.GetById(gp.PlayerId);
                 if (player.RoleId != Role.Dealer)
                 {
                     GamePlayer gamePlayer = new GamePlayer();
@@ -377,14 +183,162 @@ namespace BlackJack.BusinessLogic.Services
                     gamePlayer.GameId = gp.GameId;
                     gamePlayer.Points = gp.Points;
                     gamePlayer.Result = gp.Result;
-                    showGamePlayers.Add(gamePlayer);
+                    listGamePlayers.Add(gamePlayer);
                 }
             }
-            foreach (GamePlayer gp in showGamePlayers)
+            foreach (GamePlayer gp in listGamePlayers)
             {
                 Card card = await PassCard();
                 await StartGameRound(gp.Id, card);
             }
+            await CheckGameRoundResults(id);
+        }
+
+        public async Task<StartGameView> Start()
+        {
+            StartGameView game = new StartGameView();
+            var players = await _playerRepository.GetPlayers();
+            var dealers = await _playerRepository.GetDealers();
+            game.Dealers = new List<PlayerStartGameViewItem>();
+            game.Players = new List<PlayerStartGameViewItem>();
+            foreach(Player player in players)
+            {
+                PlayerStartGameViewItem playerStartGame = new PlayerStartGameViewItem();
+                playerStartGame.Id = player.Id;
+                playerStartGame.Name = player.Name;
+                game.Players.Add(playerStartGame);
+            }
+            foreach(Player dealer in dealers)
+            {
+                PlayerStartGameViewItem dealerStartGame = new PlayerStartGameViewItem();
+                dealerStartGame.Id = dealer.Id;
+                dealerStartGame.Name = dealer.Name;
+                game.Dealers.Add(dealerStartGame);
+            }
+            return game;
+
+        }
+
+        public async Task<int> Start(StartGameView startGameView)
+        {
+            Game game = new Game();
+            if (startGameView.Name == null) startGameView.Name = "Game Default name";
+            game.Name = startGameView.Name;
+            int gameId = await _gameRepository.Add(game);
+            GamePlayer dealer = new GamePlayer();
+            dealer.GameId = gameId;
+            dealer.PlayerId = startGameView.DealerId;
+            dealer.Points = 0;
+            dealer.Result = string.Empty;
+            await _gamePlayerRepository.Add(dealer);
+            GamePlayer player = new GamePlayer();
+            player.GameId = gameId;
+            player.PlayerId = startGameView.PlayerId;
+            player.Points = 0;
+            player.Result = string.Empty;
+            await _gamePlayerRepository.Add(player);
+            var bots = await _playerRepository.GetBots();
+            int botsNumberCounter = 0;
+            foreach(Player bot in bots)
+            {
+                if (botsNumberCounter >= startGameView.BotsNumber) break;
+                else
+                {
+                    GamePlayer gameBot = new GamePlayer();
+                    gameBot.GameId = gameId;
+                    gameBot.PlayerId = bot.Id;
+                    gameBot.Points = 0;
+                    gameBot.Result = string.Empty;
+                    await _gamePlayerRepository.Add(gameBot);
+                    botsNumberCounter++;
+                }
+            }
+            await StartFirstGameRound(gameId);
+            return gameId;
+        }
+
+        public async Task<PlayGameView> Play(int id)
+        {
+            PlayGameView playGameView = new PlayGameView();
+            playGameView.Id = id;
+            playGameView.Players = new List<GamePlayerPlayGameViewItem>();
+            var allGamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
+            foreach(GamePlayer gp in allGamePlayers)
+            {
+                GamePlayerPlayGameViewItem gpView = new GamePlayerPlayGameViewItem();
+                Player player = await _playerRepository.GetById(gp.PlayerId);
+                gpView.Id = gp.Id;
+                gpView.Name = player.Name;
+                gpView.PlayerId = player.Id;
+                gpView.GameId = id;
+                gpView.Points = gp.Points;
+                gpView.Result = gp.Result;
+                if (player.RoleId == Role.Dealer)
+                {
+                    playGameView.Dealer = gpView;
+                }
+                else
+                {
+                    playGameView.Players.Add(gpView);
+                }
+            }
+            return playGameView;
+
+        }
+
+        public async Task<IEnumerable<HistoryGameView>> History()
+        {
+            List<HistoryGameView> historyGames = new List<HistoryGameView>();           
+            var games = await _gameRepository.All();
+            foreach(Game game in games)
+            {
+                HistoryGameView historyGame = new HistoryGameView();
+                historyGame.Id = game.Id;
+                historyGame.Name = game.Name;
+                var players = await _gamePlayerRepository.GetGamePlayersByGameId( game.Id);
+                foreach(GamePlayer gp in players)
+                {
+                    Player player = await _playerRepository.GetById(gp.PlayerId);
+                    if (player.RoleId == Role.Dealer)
+                    {
+                        historyGame.DealerName = player.Name;
+                    }
+                    else
+                    {
+                        if (player.RoleId == Role.Player)
+                        {
+                            historyGame.PlayerName = player.Name;
+                        }
+                        else continue;
+                    }
+                }
+                historyGames.Add(historyGame);
+            }
+            return historyGames;
+        }
+
+        public async Task<DetailsGameView> Details(int id)
+        {
+            DetailsGameView detailsGameView = new DetailsGameView();
+            Game game = await _gameRepository.GetById(id );
+            detailsGameView.Id = game.Id;
+            detailsGameView.Name = game.Name;
+            var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
+            detailsGameView.Players = new List<GamePlayerDetailsGameViewItem>();
+            foreach(GamePlayer gp in gamePlayers)
+            {
+                GamePlayerDetailsGameViewItem gamePlayerViewItem = new GamePlayerDetailsGameViewItem();
+                Player player = await _playerRepository.GetById( gp.PlayerId);
+                gamePlayerViewItem.Id = gp.Id;
+                gamePlayerViewItem.PlayerId = gp.PlayerId;
+                gamePlayerViewItem.Name = player.Name;
+                gamePlayerViewItem.Points = gp.Points;
+                gamePlayerViewItem.Result = gp.Result;
+                if (player.RoleId == Role.Dealer) detailsGameView.Dealer = gamePlayerViewItem;
+                else detailsGameView.Players.Add(gamePlayerViewItem);
+
+            }
+            return detailsGameView;
         }
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="DapperRepositories\CardRepository.cs" />
     <Compile Include="DapperRepositories\GamePlayerRepository.cs" />
     <Compile Include="DapperRepositories\GameRepository.cs" />
+    <Compile Include="DapperRepositories\GenericRepository.cs" />
     <Compile Include="DapperRepositories\PlayerRepository.cs" />
     <Compile Include="EntityFrameworkRepository\BlackJackContext.cs" />
     <Compile Include="EntityFrameworkRepository\CardRepository.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Interfaces\ICardRepository.cs" />
     <Compile Include="Interfaces\IGamePlayerRepository.cs" />
     <Compile Include="Interfaces\IGameRepository.cs" />
+    <Compile Include="Interfaces\IGenericRepository.cs" />
     <Compile Include="Interfaces\IPlayerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

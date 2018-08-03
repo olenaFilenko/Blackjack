@@ -5,7 +5,7 @@ using System.Web;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using System.Data.Entity;
-using BlackJack.DataAccess.Iterfaces;
+using BlackJack.DataAccess.Interfaces;
 using System.Threading.Tasks;
 
 
@@ -89,6 +89,31 @@ namespace BlackJack.DataAccess.EntityFrameworkRepository
         {
             GamePlayer dealer = await (from gp in _context.GamePlayers where gp.Id == id && gp.Player.RoleId == Role.Dealer select gp).FirstOrDefaultAsync();
             return dealer;
+        }
+
+        public Task<IEnumerable<GamePlayer>> All()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GamePlayer> GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Delete(GamePlayer entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> Add(GamePlayer entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(GamePlayer entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

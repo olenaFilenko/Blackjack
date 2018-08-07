@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.DataAccess.Interfaces;
 using BlackJack.Entities.Enums;
@@ -9,9 +10,9 @@ namespace BlackJack.BusinessLogic.Services
 {
     public class PlayerService : IPlayerService
     {
-        private IGenericRepository<Player> _playerRepository;        
+        private IPlayerRepository _playerRepository;        
 
-        public PlayerService(IGenericRepository<Player> playerRepository) {           
+        public PlayerService(IPlayerRepository playerRepository) {           
             _playerRepository = playerRepository;
         }
 
@@ -22,6 +23,42 @@ namespace BlackJack.BusinessLogic.Services
             player.RoleId = Role.Player;
             await _playerRepository.Add(player);
         }
-        
+
+        public async Task AddPlayer(RequestAddPlayerView addPlayerView)
+        {
+            Player player = new Player();
+            player.Name = addPlayerView.Name;
+            player.RoleId = Role.Player;
+            await _playerRepository.Add(player);
+        }
+
+        public async Task<IEnumerable<GetDealersView>> GetDealers()
+        {
+            List<GetDealersView> dealers = new List<GetDealersView>();
+            var getDealers = await _playerRepository.GetDealers();
+            foreach(Player d in getDealers)
+            {
+                GetDealersView dealer = new GetDealersView();
+                dealer.Id = d.Id;
+                dealer.Name = d.Name;
+                dealers.Add(dealer);
+            }
+            return dealers;
+        }
+
+        public async Task<IEnumerable<GetDealersView>> GetPlayers()
+        {
+            List<GetDealersView> players = new List<GetDealersView>();
+            var getPlayers = await _playerRepository.GetPlayers();
+            foreach (Player p in getPlayers)
+            {
+                GetDealersView player = new GetDealersView();
+                player.Id = p.Id;
+                player.Name = p.Name;
+                players.Add(player);
+            }
+            return players;
+        }
+
     }
 }

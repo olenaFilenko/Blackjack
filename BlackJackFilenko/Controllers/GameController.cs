@@ -6,12 +6,14 @@ using System.Web;
 using System.Web.Mvc;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels.GameServiceViewModels;
+using NLog;
 
 
 namespace BlackJackFilenko.Controllers
 {
     public class GameController : AsyncController
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private IGameService _gameService;
 
         public GameController(IGameService gameService) {
@@ -31,6 +33,7 @@ namespace BlackJackFilenko.Controllers
             }
             catch (Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             }
         }
@@ -38,13 +41,15 @@ namespace BlackJackFilenko.Controllers
         [HttpPost]
         public async Task<ActionResult> Start(StartGameView startGame)
         {
+            int gameId = await _gameService.Start(startGame);
+            return RedirectToAction("Play", new { id = gameId });
             try
             {
-                int gameId = await _gameService.Start(startGame);
-                return RedirectToAction("Play", new { id = gameId });
+                
             }
             catch (Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             }            
         }
@@ -59,6 +64,7 @@ namespace BlackJackFilenko.Controllers
             }
             catch(Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             }            
         }
@@ -69,10 +75,11 @@ namespace BlackJackFilenko.Controllers
             try
             {
                 await _gameService.Enough(gameId);
-                return RedirectToAction("Play", new { id = gameId });
+                return RedirectToAction("Details", new { id = gameId });
             }
             catch (Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             } 
         }
@@ -87,6 +94,7 @@ namespace BlackJackFilenko.Controllers
             }
             catch (Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             }
         }
@@ -101,6 +109,7 @@ namespace BlackJackFilenko.Controllers
             }
             catch (Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             }
         }
@@ -114,6 +123,7 @@ namespace BlackJackFilenko.Controllers
             }
             catch (Exception e)
             {
+                logger.Error(e.Message);
                 return View("Error");
             }
         }

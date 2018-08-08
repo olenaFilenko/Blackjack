@@ -27,3 +27,7 @@ textarea {
     float:right;
     border: 1px solid black;
 }
+.k-list-scroller {
+    position: relative;
+    overflow: auto;
+}

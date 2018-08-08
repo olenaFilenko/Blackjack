@@ -38,19 +38,6 @@ namespace BlackJackFilenko.Controllers
             }
             
         }
-
-       /*[HttpPost]
-        public async Task Add(RequestAddPlayerView models)
-        {            
-            
-          
-                await _playerService.AddPlayer(models);
-           
-           
-            //return RedirectToAction("Start", "Game");
-            //return Json(addPlayer);
-        }*/
-
         public async Task<JsonResult> GetDealers()
         {
             var dealers = await _playerService.GetDealers();

@@ -18,7 +18,10 @@ namespace BlackJack.ViewModels.GameServiceViewModels
         [Display(Name = "Choose player")]
         public int PlayerId { get; set; }
 
-        [Range(0,5,ErrorMessage ="The bots number shoud be between {0} and {1}")]
+        public string NewPlayerName { get; set; }
+
+        [Range(0, 5,
+            ErrorMessage ="{0} shoud be between {1} and {2}")]
         [Display(Name ="Number of bots")]
         public int BotsNumber { get; set; }
     }

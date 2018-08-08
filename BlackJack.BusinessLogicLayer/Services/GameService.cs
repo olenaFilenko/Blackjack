@@ -231,6 +231,13 @@ namespace BlackJack.BusinessLogic.Services
             dealer.Points = 0;
             dealer.Result = string.Empty;
             await _gamePlayerRepository.Add(dealer);
+            if (startGameView.PlayerId == 0)
+            {
+                Player newPlayer = new Player();
+                newPlayer.Name = startGameView.NewPlayerName;
+                newPlayer.RoleId = Role.Player;
+                startGameView.PlayerId = await _playerRepository.Add(newPlayer);
+            }
             GamePlayer player = new GamePlayer();
             player.GameId = gameId;
             player.PlayerId = startGameView.PlayerId;
@@ -261,6 +268,7 @@ namespace BlackJack.BusinessLogic.Services
         {
             PlayGameView playGameView = new PlayGameView();
             playGameView.Id = id;
+            playGameView.Name = (await _gameRepository.GetById(id)).Name;
             playGameView.Players = new List<GamePlayerPlayGameViewItem>();
             var allGamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
             foreach(GamePlayer gp in allGamePlayers)

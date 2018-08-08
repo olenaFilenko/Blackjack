@@ -21,10 +21,6 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-
-
-        
-
         <div class="form-group">
             @Html.LabelFor(model => model.DealerId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -36,10 +32,10 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PlayerId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input id="players" name="PlayerId" />
+                <input id="players" name="PlayerId" class="k-list-scroller" />
+                <input id="AddPlayer" name="NewPlayerName" type="hidden" />
                 @Html.ValidationMessageFor(model => model.PlayerId, "", new { @class = "text-danger" })
             </div>
-            @Html.ActionLink("Add new player", "Add", "Player")
         </div>
 
         <div class="form-group">
@@ -57,31 +53,21 @@
         </div>
     </div>
 }
-    <script id="noDataTemplate" type="text/x-kendo-tmpl">
-        <div>
-            No data found. Do you want to add new item - '#: instance.text() #' ?
-        </div>
-        <br />
-        <button class="k-button" onclick="addNew('#: instance.element[0].id #', '#: instance.text() #')">Add new item</button>
-    </script>
+<script id="noDataTemplate" type="text/x-kendo-tmpl">
+    <div>
+        No data found. Do you want to add new item - '#: instance.text() #' ?
+    </div>
+    <br />
+    <button class="k-button" onclick="addNew('#: instance.element[0].id #', '#: instance.text() #')">Add new item</button>
+</script>
 <script>
     function addNew(widgetId, value) {
-        var widget = $("#" + widgetId).getKendoComboBox();
-        var dataSource = widget.dataSource;
-        
         if (confirm("Are you sure?")) {
-            dataSource.add({
-                Id:0,
-                Name: value
-            });
-
-            dataSource.one("sync", function () {
-                widget.select(dataSource.view().length - 1);
-            });
-
-            dataSource.sync();
+            $("#AddPlayer").val(value);
+            $("players").val(0);
         }
-    };
+    }
+
 </script>
 
 <script>
@@ -103,7 +89,7 @@
                     }
                 }
             }
-        });
+        });        
         $("#Dealers").kendoDropDownList({
             dataTextField: "Name",
             dataValueField: "Id",
@@ -115,18 +101,7 @@
                 read: {
                     url: "http://localhost:50183/Player/GetPlayers",
                     dataType: "json"
-                },
-                create: {
-                    url: "http://localhost:50183/Player/Add",
-                    type:"POST",
-                    dataType: "json"
-                },
-                parameterMap: function (options, operation) {
-                    if (operation !== "read" && options.models) {
-                        return { models: kendo.stringify(options.models)};
-                    }
                 }
-
             },
             schema: {
                 model: {
@@ -145,7 +120,6 @@
             dataSource: playerDataSource,
             noDataTemplate: $("#noDataTemplate").html()
         });
-
     });
 </script>
 

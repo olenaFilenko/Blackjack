@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJack.BusinessLogic", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJack.ViewModels", "BlackJack.ViewModelsLayer\BlackJack.ViewModels.csproj", "{68C675B3-F481-48AD-9B84-FFA043AAC907}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJack.WebAPI", "BlackJack.WebAPI\BlackJack.WebAPI.csproj", "{8DB9A126-0BE0-42EA-805B-90F5586862ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{68C675B3-F481-48AD-9B84-FFA043AAC907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C675B3-F481-48AD-9B84-FFA043AAC907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68C675B3-F481-48AD-9B84-FFA043AAC907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

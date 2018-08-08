@@ -19,8 +19,6 @@ namespace BlackJack.BusinessLogic.Services
         private IGamePlayerRepository _gamePlayerRepository;
         private IGenericRepository<Card> _cardRepository;
         
-
-        
         public GameService(IGenericRepository<Game> gameRepository, IGamePlayerRepository gamePlayerRepository,
             IPlayerRepository playerRepository, IGenericRepository<Card> cardRepository)
         {            
@@ -38,7 +36,10 @@ namespace BlackJack.BusinessLogic.Services
                 Player player = await _playerRepository.GetById(gp.PlayerId);
                 if (player.RoleId != Role.Dealer)
                 {
-                    if (gp.Points == 21 && string.IsNullOrEmpty(gp.Result)) gp.Result += "BlackJack ";
+                    if (gp.Points == AppConfig.BlackjackPointNumber && string.IsNullOrEmpty(gp.Result))
+                    {
+                        gp.Result += "BlackJack ";
+                    }
                 }
                 await _gamePlayerRepository.Update(gp);
             }
@@ -62,7 +63,7 @@ namespace BlackJack.BusinessLogic.Services
                 }
             }
             Card card = new Card();
-            while (dealer.Points < 17)
+            while (dealer.Points < AppConfig.DealerPointsStopNumber)
             {
                 card = await PassCard();
                 await StartGameRound(dealer.Id, card);
@@ -80,31 +81,45 @@ namespace BlackJack.BusinessLogic.Services
             foreach(GamePlayer gp in gamePlayers)
             {
                 Player player = await _playerRepository.GetById(gp.PlayerId);
-                if (player.RoleId != Role.Dealer) players.Add(gp);
-                else dealer = gp;
+                if (player.RoleId != Role.Dealer)
+                {
+                    players.Add(gp);
+                }
+                else {
+                    dealer = gp;
+                } 
             }
             foreach(GamePlayer gp in players)
             {
                 if (gp.Id == dealer.Id) continue;
                 else
                 {
-                    if (dealer.Points <= 21)
+                    if (dealer.Points <= AppConfig.BlackjackPointNumber)
                     {
-                        if (dealer.Points == 21 && gp.Points < 21) gp.Result += " You lost";
+                        if (dealer.Points == AppConfig.BlackjackPointNumber && gp.Points < AppConfig.BlackjackPointNumber) gp.Result += " You lost";
                         else
                         {
-                            if (gp.Points > dealer.Points && gp.Points <= 21) gp.Result += " You won";
+                            if (gp.Points > dealer.Points && gp.Points <= AppConfig.BlackjackPointNumber)
+                            {
+                                gp.Result += " You won";
+                            }
                             else
                             {
-                                if (gp.Points == dealer.Points && gp.Points <= 21) gp.Result += " Even";
+                                if (gp.Points == dealer.Points && gp.Points <= AppConfig.BlackjackPointNumber) gp.Result += " Even";
                                 else gp.Result += " You lost";
                             }
                         }
                     }
                     else
                     {
-                        if (gp.Points <= 21) gp.Result += " You won";
-                        else gp.Result += " You lost";
+                        if (gp.Points <= AppConfig.BlackjackPointNumber)
+                        {
+                            gp.Result += " You won";
+                        }
+                        else
+                        {
+                            gp.Result += " You lost";
+                        }
                     }
                     
                     await _gamePlayerRepository.Update(gp);
@@ -130,7 +145,7 @@ namespace BlackJack.BusinessLogic.Services
             GamePlayer gamePlayer = await _gamePlayerRepository.GetById(gamePlayerId );
             if (string.IsNullOrEmpty(gamePlayer.Result))
             {
-                if (gamePlayer.Points <= 21)
+                if (gamePlayer.Points <= AppConfig.BlackjackPointNumber)
                 {
                     gamePlayer.Points += passCard.Value;
                 }
@@ -246,7 +261,10 @@ namespace BlackJack.BusinessLogic.Services
             int botsNumberCounter = 0;
             foreach(Player bot in bots)
             {
-                if (botsNumberCounter >= startGameView.BotsNumber) break;
+                if (botsNumberCounter >= startGameView.BotsNumber)
+                {
+                    break;
+                }
                 else
                 {
                     GamePlayer gameBot = new GamePlayer();
@@ -266,7 +284,9 @@ namespace BlackJack.BusinessLogic.Services
         {
             PlayGameView playGameView = new PlayGameView();
             playGameView.Id = id;
-            playGameView.Name = (await _gameRepository.GetById(id)).Name;
+            Game game= await _gameRepository.GetById(id);
+            playGameView.Name = game.Name;
+            playGameView.CreationDate = game.CreationDate;
             playGameView.Players = new List<GamePlayerPlayGameViewItem>();
             var allGamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
             foreach(GamePlayer gp in allGamePlayers)
@@ -292,15 +312,17 @@ namespace BlackJack.BusinessLogic.Services
 
         }
 
-        public async Task<IEnumerable<HistoryGameView>> History()
+        public async Task<HistoryGameView> History()
         {
-            List<HistoryGameView> historyGames = new List<HistoryGameView>();           
+            HistoryGameView history = new HistoryGameView();
+            history.Games = new List<HistoryGameViewItem>();           
             var games = await _gameRepository.All();
             foreach(Game game in games)
             {
-                HistoryGameView historyGame = new HistoryGameView();
+                HistoryGameViewItem historyGame = new HistoryGameViewItem();
                 historyGame.Id = game.Id;
                 historyGame.Name = game.Name;
+                historyGame.CreationDate = game.CreationDate;
                 var players = await _gamePlayerRepository.GetGamePlayersByGameId( game.Id);
                 foreach(GamePlayer gp in players)
                 {
@@ -318,9 +340,9 @@ namespace BlackJack.BusinessLogic.Services
                         else continue;
                     }
                 }
-                historyGames.Add(historyGame);
+                history.Games.Add(historyGame);
             }
-            return historyGames;
+            return history;
         }
 
         public async Task<DetailsGameView> Details(int id)
@@ -329,6 +351,7 @@ namespace BlackJack.BusinessLogic.Services
             Game game = await _gameRepository.GetById(id );
             detailsGameView.Id = game.Id;
             detailsGameView.Name = game.Name;
+            detailsGameView.CreationDate = game.CreationDate;
             var gamePlayers = await _gamePlayerRepository.GetGamePlayersByGameId(id);
             detailsGameView.Players = new List<GamePlayerDetailsGameViewItem>();
             foreach(GamePlayer gp in gamePlayers)
@@ -340,8 +363,14 @@ namespace BlackJack.BusinessLogic.Services
                 gamePlayerViewItem.Name = player.Name;
                 gamePlayerViewItem.Points = gp.Points;
                 gamePlayerViewItem.Result = gp.Result;
-                if (player.RoleId == Role.Dealer) detailsGameView.Dealer = gamePlayerViewItem;
-                else detailsGameView.Players.Add(gamePlayerViewItem);
+                if (player.RoleId == Role.Dealer)
+                {
+                    detailsGameView.Dealer = gamePlayerViewItem;
+                }
+                else
+                {
+                    detailsGameView.Players.Add(gamePlayerViewItem);
+                }
 
             }
             return detailsGameView;

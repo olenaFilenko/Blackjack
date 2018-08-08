@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BlackJack.ViewModels.PlayerServiceViewModels
 {
-    public class GetPlayersView
+    public class GetDealersViewItem
     {
-        public List<GetPlayersViewItem> Players { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

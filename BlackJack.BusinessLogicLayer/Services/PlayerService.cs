@@ -32,30 +32,32 @@ namespace BlackJack.BusinessLogic.Services
             await _playerRepository.Add(player);
         }
 
-        public async Task<IEnumerable<GetDealersView>> GetDealers()
+        public async Task<GetDealersView> GetDealers()
         {
-            List<GetDealersView> dealers = new List<GetDealersView>();
+            GetDealersView dealers = new GetDealersView();
+            dealers.Dealers = new List<GetDealersViewItem>();
             var getDealers = await _playerRepository.GetDealers();
             foreach(Player d in getDealers)
             {
-                GetDealersView dealer = new GetDealersView();
+                GetDealersViewItem dealer = new GetDealersViewItem();
                 dealer.Id = d.Id;
                 dealer.Name = d.Name;
-                dealers.Add(dealer);
+                dealers.Dealers.Add(dealer);
             }
             return dealers;
         }
 
-        public async Task<IEnumerable<GetPlayersView>> GetPlayers()
+        public async Task<GetPlayersView> GetPlayers()
         {
-            List<GetPlayersView> players = new List<GetPlayersView>();
+            GetPlayersView players = new GetPlayersView();
+            players.Players = new List<GetPlayersViewItem>();
             var getPlayers = await _playerRepository.GetPlayers();
             foreach (Player p in getPlayers)
             {
-                GetPlayersView player = new GetPlayersView();
+                GetPlayersViewItem player = new GetPlayersViewItem();
                 player.Id = p.Id;
                 player.Name = p.Name;
-                players.Add(player);
+                players.Players.Add(player);
             }
             return players;
         }

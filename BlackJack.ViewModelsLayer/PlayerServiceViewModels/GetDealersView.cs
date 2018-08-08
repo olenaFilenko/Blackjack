@@ -8,7 +8,6 @@ namespace BlackJack.ViewModels.PlayerServiceViewModels
 {
     public class GetDealersView
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public List<GetDealersViewItem> Dealers { get; set; }
     }
 }

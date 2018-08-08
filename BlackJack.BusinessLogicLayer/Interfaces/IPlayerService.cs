@@ -8,8 +8,8 @@ namespace BlackJack.BusinessLogic.Interfaces
     public interface IPlayerService
     {
         Task AddPlayer(AddPlayerView addPlayerViewModel );
-        Task<IEnumerable<GetDealersView>> GetDealers();
-        Task<IEnumerable<GetPlayersView>> GetPlayers();
+        Task<GetDealersView> GetDealers();
+        Task<GetPlayersView> GetPlayers();
         Task AddPlayer(RequestAddPlayerView addPlayerView);
     }
 }

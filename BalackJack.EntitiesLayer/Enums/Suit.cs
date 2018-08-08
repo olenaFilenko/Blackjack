@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace BalackJack.Entities.Enums
 {
-    public enum SetParametersStatus
+    public enum Suit
     {
-        Set = 0,
-        Unset= 1
+        Heart=0,
+        Tile=1,
+        Pike=2,
+        Clover=3
     }
 }

@@ -6,9 +6,8 @@ using Dapper.Contrib.Extensions;
 
 namespace BlackJack.Entities.Models
 {
-    public class GamePlayer
+    public class GamePlayer:BaseEntity
     {
-        public int Id { get; set; }
         public int GameId { get; set; }
         public int PlayerId { get; set; }
         public string Result { get; set; }

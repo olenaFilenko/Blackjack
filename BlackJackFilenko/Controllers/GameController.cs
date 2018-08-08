@@ -107,8 +107,8 @@ namespace BlackJackFilenko.Controllers
             {
                 int pageSize = 20;
                 int pageNumber = (page ?? 1);
-                var games = await _gameService.History();
-                return View(games.ToPagedList(pageNumber, pageSize));
+                var games = await _gameService.History();                
+                return View(games);
             }
             catch (Exception e)
             {

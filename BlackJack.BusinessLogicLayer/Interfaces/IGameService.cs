@@ -11,7 +11,7 @@ namespace BlackJack.BusinessLogic.Interfaces
         Task<StartGameView> Start();
         Task<int> Start(StartGameView startGameView);
         Task<PlayGameView> Play(int id);
-        Task<IEnumerable<HistoryGameView>> History();
+        Task<HistoryGameView> History();
         Task<DetailsGameView> Details(int id);
         Task Enough(int id);
         Task More(int id);

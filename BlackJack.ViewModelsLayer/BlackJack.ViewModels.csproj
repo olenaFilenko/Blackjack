@@ -45,13 +45,17 @@
     <Compile Include="GameServiceViewModels\GamePlayerDetailsGameViewItem.cs" />
     <Compile Include="GameServiceViewModels\GamePlayerPlayGameViewItem.cs" />
     <Compile Include="GameServiceViewModels\HistoryGameView.cs" />
+    <Compile Include="GameServiceViewModels\HistoryGameViewItem.cs" />
+    <Compile Include="GameServiceViewModels\PageInfoHistoryViewItem.cs" />
     <Compile Include="GameServiceViewModels\PlayerStartGameViewItem.cs" />
     <Compile Include="GameServiceViewModels\PlayGameView.cs" />
     <Compile Include="GameServiceViewModels\ShowGameViewModel.cs" />
     <Compile Include="GameServiceViewModels\StartGameView.cs" />
     <Compile Include="PlayerServiceViewModels\AddPlayerView.cs" />
     <Compile Include="PlayerServiceViewModels\GetDealersView.cs" />
+    <Compile Include="PlayerServiceViewModels\GetDealersViewItem.cs" />
     <Compile Include="PlayerServiceViewModels\GetPlayersView.cs" />
+    <Compile Include="PlayerServiceViewModels\GetPlayersViewItem.cs" />
     <Compile Include="PlayerServiceViewModels\RequestAddPlayerView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -7,9 +7,8 @@ using Dapper.Contrib.Extensions;
 
 namespace BlackJack.Entities.Models
 {
-    public class Player
+    public class Player:BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public Role RoleId { get; set; }
 

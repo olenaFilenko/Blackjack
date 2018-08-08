@@ -8,9 +8,7 @@ namespace BlackJack.ViewModels.GameServiceViewModels
 {
     public class HistoryGameView
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string DealerName { get; set; }
-        public string PlayerName { get; set; }
+        public List<HistoryGameViewItem> Games { get; set; }
+        public PageInfoHistoryViewItem PageInfo { get; set; }
     }
 }

@@ -17,8 +17,6 @@ namespace BlackJack.BusinessLogic.Services
         private IGenericRepository<Game> _gameRepository;
         private IPlayerRepository _playerRepository;
         private IGamePlayerRepository _gamePlayerRepository;
-        //private IGenericRepository<GamePlayer> _gamePlayerRepository;
-        //private IGenericRepository<Player> _playerRepository;
         private IGenericRepository<Card> _cardRepository;
         
 

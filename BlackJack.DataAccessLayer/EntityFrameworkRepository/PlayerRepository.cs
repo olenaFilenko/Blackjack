@@ -11,111 +11,31 @@ using BlackJack.DataAccess.Interfaces;
 
 namespace BlackJack.DataAccess.EntityFrameworkRepository
 {
-    public class PlayerRepository : IPlayerRepository
+    public class PlayerRepository : GenericRepository<Player>, IPlayerRepository
     {
         private BlackJackContext _context;
 
-        public PlayerRepository(BlackJackContext context) {
+        public PlayerRepository(BlackJackContext context):base(context)
+        {
             _context = context;
-        }
-
-        public async Task DeletePlayer(int id)
-        {
-            Player player =await _context.Players.FindAsync(id);
-            _context.Players.Remove(player);
-            await _context.SaveChangesAsync();
-        }
-        
-        public Task Save()
-        {
-            return _context.SaveChangesAsync();
-        }
-               
-        private bool _disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public async Task<IEnumerable<Player>> GetPlayers()
-        {
-            var pl=await (from p in _context.Players where p.RoleId==Role.Player select p).ToListAsync();
-            return pl;
-            
-        }
-
-        public async Task<Player> GetPlayerById(int id)
-        {
-            return await _context.Players.FindAsync(id);
-        }
-
-        public async Task InsertPlayer(Player player)
-        {
-            _context.Players.Add(player);
-            await  _context.SaveChangesAsync();
-        }
-
-        public async Task UpdatePlayer(Player player)
-        {
-            _context.Entry(player).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<Player>> GetDealers()
-        {
-            var pl = await(from p in _context.Players where p.RoleId==Role.Dealer select p).ToListAsync();
-            return pl;
-        }
-
-        public async Task<IEnumerable<Player>> GetAllPlayers()
-        {
-            var pl = await (from p in _context.Players select p).ToListAsync();
-            return pl;
         }
 
         public async Task<IEnumerable<Player>> GetBots()
         {
-            var pl = await(from p in _context.Players where p.RoleId == Role.Bot select p).ToListAsync();
-            return pl;
+            var bots = await(from b in _context.Players where b.RoleId == Role.Bot select b).ToListAsync();
+            return bots;
         }
 
-        public Task<IEnumerable<Player>> All()
+        public async Task<IEnumerable<Player>> GetDealers()
         {
-            throw new NotImplementedException();
+            var dealers = await(from d in _context.Players where d.RoleId == Role.Dealer select d).ToListAsync();
+            return dealers;
         }
 
-        public Task<Player> GetById(int id)
+        public async Task<IEnumerable<Player>> GetPlayers()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(Player entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> Add(Player entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(Player entity)
-        {
-            throw new NotImplementedException();
+            var players = await (from p in _context.Players where p.RoleId == Role.Player select p).ToListAsync();
+            return players;
         }
     }
 }

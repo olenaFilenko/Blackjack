@@ -24,21 +24,29 @@
 
     @using (Html.BeginForm("More", "Game", new { gameId = Model.Id }))
     {
-        <input type="submit" value="More" class="btn btn-default" />
+        <input type="submit" value="More" class="btn btn-default btn-block" />
     }
     @using (Html.BeginForm("Enough", "Game", new { gameId = Model.Id }))
     {
-        <input type="submit" value="Enough" class="btn btn-default" />
+        <input type="submit" value="Enough" class="btn btn-default btn-block" />
     }
 
 </div>
 <div>
-    <table class="table">
+    <table class="table table-bordered">
         <tr>
             <td>@Html.DisplayNameFor(model => model.Dealer)</td>
+            <td>@Html.DisplayNameFor(model=>model.Dealer.Points)</td>
+        </tr>
+        <tr>
             <td>@Model.Dealer.Name</td>
             <td>@Model.Dealer.Points</td>
         </tr>
+    </table>
+</div>
+<div>
+    <table class="table table-bordered">
+        
         <tr>
             <td>Player</td>
             <td>Players points </td>

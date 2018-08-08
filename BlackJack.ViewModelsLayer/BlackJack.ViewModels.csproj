@@ -51,6 +51,7 @@
     <Compile Include="GameServiceViewModels\StartGameView.cs" />
     <Compile Include="PlayerServiceViewModels\AddPlayerView.cs" />
     <Compile Include="PlayerServiceViewModels\GetDealersView.cs" />
+    <Compile Include="PlayerServiceViewModels\GetPlayersView.cs" />
     <Compile Include="PlayerServiceViewModels\RequestAddPlayerView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

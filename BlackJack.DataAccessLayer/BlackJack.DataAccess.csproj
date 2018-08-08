@@ -67,6 +67,7 @@
     <Compile Include="EntityFrameworkRepository\CardRepository.cs" />
     <Compile Include="EntityFrameworkRepository\GamePlayerRepository.cs" />
     <Compile Include="EntityFrameworkRepository\GameRepository.cs" />
+    <Compile Include="EntityFrameworkRepository\GenericRepository.cs" />
     <Compile Include="EntityFrameworkRepository\PlayerRepository.cs" />
     <Compile Include="Interfaces\ICardRepository.cs" />
     <Compile Include="Interfaces\IGamePlayerRepository.cs" />

@@ -1,5 +1,6 @@
-﻿@model IEnumerable<BlackJack.ViewModels.GameServiceViewModels.HistoryGameView>
-
+﻿@model PagedList.IPagedList<BlackJack.ViewModels.GameServiceViewModels.HistoryGameView>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "Games history";
 }
@@ -9,35 +10,43 @@
 <p>
     @Html.ActionLink("Start new game", "Start")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DealerName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PlayerName)
-        </th>
-        <th></th>
-    </tr>
+<table class="table table-bordered">
+    <thead >
+        <tr>
+            <th>
+                Game
+            </th>
+            <th>
+                Dealer
+            </th>
+            <th>
+                Player
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DealerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PlayerName)
-        </td>
-        <td>
-            @Html.ActionLink("Look game's results", "Details", new { id=item.Id }) 
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerName)
+            </td>
+            <td>
+                @Html.ActionLink("Look game's results", "Details", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) from @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("History", new { page }))

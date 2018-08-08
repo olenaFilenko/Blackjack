@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels.GameServiceViewModels;
 using NLog;
+using PagedList.Mvc;
+using PagedList;
 
 
 namespace BlackJackFilenko.Controllers
@@ -41,11 +43,10 @@ namespace BlackJackFilenko.Controllers
         [HttpPost]
         public async Task<ActionResult> Start(StartGameView startGame)
         {
-            int gameId = await _gameService.Start(startGame);
-            return RedirectToAction("Play", new { id = gameId });
             try
             {
-                
+                int gameId = await _gameService.Start(startGame);
+                return RedirectToAction("Play", new { id = gameId });
             }
             catch (Exception e)
             {
@@ -100,12 +101,14 @@ namespace BlackJackFilenko.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> History()
+        public async Task<ActionResult> History(int? page)
         {
             try
             {
+                int pageSize = 20;
+                int pageNumber = (page ?? 1);
                 var games = await _gameService.History();
-                return View(games);
+                return View(games.ToPagedList(pageNumber, pageSize));
             }
             catch (Exception e)
             {

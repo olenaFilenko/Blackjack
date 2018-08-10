@@ -9,5 +9,10 @@ namespace BlackJack.ViewModels.PlayerServiceViewModels
     public class GetDealersView
     {
         public List<GetDealersViewItem> Dealers { get; set; }
+
+        public GetDealersView()
+        {
+            Dealers = new List<GetDealersViewItem>();
+        }
     }
 }

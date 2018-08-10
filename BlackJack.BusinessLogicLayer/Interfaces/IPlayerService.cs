@@ -9,7 +9,6 @@ namespace BlackJack.BusinessLogic.Interfaces
     {
         Task AddPlayer(AddPlayerView addPlayerViewModel );
         Task<GetDealersView> GetDealers();
-        Task<GetPlayersView> GetPlayers();
-        Task AddPlayer(RequestAddPlayerView addPlayerView);
+        Task<GetPlayersView> GetPlayers();       
     }
 }

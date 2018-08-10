@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlackJack.DataAccess.Interfaces
@@ -13,5 +10,7 @@ namespace BlackJack.DataAccess.Interfaces
         Task Delete(TEntity entity);
         Task<int> Add(TEntity entity);
         Task Update(TEntity entity);
+        Task Update(List<TEntity> entities);
+        Task Add(List<TEntity> entities);
     }
 }

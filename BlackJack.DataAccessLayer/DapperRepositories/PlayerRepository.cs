@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using BlackJack.DataAccess.Interfaces;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using Dapper;
-using Dapper.Contrib.Extensions;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;

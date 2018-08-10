@@ -1,6 +1,4 @@
-﻿@model PagedList.IPagedList<BlackJack.ViewModels.GameServiceViewModels.HistoryGameView>
-@using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+﻿@model BlackJack.ViewModels.GameServiceViewModels.HistoryGameView
 @{
     ViewBag.Title = "Games history";
 }
@@ -22,22 +20,26 @@
             <th>
                 Player
             </th>
+            <th>Creation date</th>
             <th></th>
         </tr>
     </thead>
     
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Games)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @item.Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DealerName)
+                @item.DealerName
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PlayerName)
+                @item.PlayerName
+            </td>
+            <td>
+                @item.CreationDate
             </td>
             <td>
                 @Html.ActionLink("Look game's results", "Details", new { id = item.Id })
@@ -47,6 +49,4 @@
 
 </table>
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) from @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("History", new { page }))

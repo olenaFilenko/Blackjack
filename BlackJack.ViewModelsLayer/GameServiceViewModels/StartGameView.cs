@@ -24,5 +24,13 @@ namespace BlackJack.ViewModels.GameServiceViewModels
             ErrorMessage ="{0} shoud be between {1} and {2}")]
         [Display(Name ="Number of bots")]
         public int BotsNumber { get; set; }
+
+        public StartGameView()
+        {
+            Dealers = new List<PlayerStartGameViewItem>();
+            Players = new List<PlayerStartGameViewItem>();
+        }
+
+
     }
 }

@@ -10,5 +10,6 @@ namespace BlackJack.BusinessLogic
     {
         public static int BlackjackPointNumber = 21;
         public static int DealerPointsStopNumber = 17;
+        public static int AceChangeValueNumber = 11;
     }
 }

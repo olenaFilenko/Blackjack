@@ -14,5 +14,11 @@ namespace BlackJack.ViewModels.GameServiceViewModels
         [Display(Name ="Dealer")]
         public GamePlayerDetailsGameViewItem Dealer { get; set; }
         public List<GamePlayerDetailsGameViewItem> Players { get; set; }
+
+        public DetailsGameView()
+        {
+            Dealer = new GamePlayerDetailsGameViewItem();
+            Players = new List<GamePlayerDetailsGameViewItem>();
+        }
     }
 }

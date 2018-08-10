@@ -26,8 +26,7 @@ namespace BlackJackFilenko.Controllers
         // GET: Game
         [HttpGet]
         public async Task<ActionResult> Start()
-        {
-            
+        { 
             try
             {
                 StartGameView game = await _gameService.Start();
@@ -101,13 +100,11 @@ namespace BlackJackFilenko.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> History(int? page)
+        public async Task<ActionResult> History()
         {
             try
             {
-                int pageSize = 20;
-                int pageNumber = (page ?? 1);
-                var games = await _gameService.History();                
+                var games = await _gameService.History();
                 return View(games);
             }
             catch (Exception e)

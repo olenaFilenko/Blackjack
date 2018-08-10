@@ -17,6 +17,7 @@
             }
         }
     });
+    var data = '@Model.Dealers';
     $("#Dealers").kendoDropDownList({
         dataTextField: "Name",
         dataValueField: "Id",

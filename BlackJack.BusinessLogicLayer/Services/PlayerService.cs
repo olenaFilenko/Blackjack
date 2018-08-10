@@ -5,6 +5,7 @@ using BlackJack.DataAccess.Interfaces;
 using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 using BlackJack.ViewModels.PlayerServiceViewModels;
+using System.Linq;
 
 namespace BlackJack.BusinessLogic.Services
 {
@@ -24,41 +25,26 @@ namespace BlackJack.BusinessLogic.Services
             await _playerRepository.Add(player);
         }
 
-        public async Task AddPlayer(RequestAddPlayerView addPlayerView)
-        {
-            Player player = new Player();
-            player.Name = addPlayerView.Name;
-            player.RoleId = Role.Player;
-            await _playerRepository.Add(player);
-        }
-
         public async Task<GetDealersView> GetDealers()
         {
             GetDealersView dealers = new GetDealersView();
-            dealers.Dealers = new List<GetDealersViewItem>();
             var getDealers = await _playerRepository.GetDealers();
-            foreach(Player d in getDealers)
+            dealers.Dealers = getDealers.Select(x => new GetDealersViewItem()
             {
-                GetDealersViewItem dealer = new GetDealersViewItem();
-                dealer.Id = d.Id;
-                dealer.Name = d.Name;
-                dealers.Dealers.Add(dealer);
-            }
+                Id = x.Id,
+                Name=x.Name
+            }).ToList();
             return dealers;
         }
 
         public async Task<GetPlayersView> GetPlayers()
         {
             GetPlayersView players = new GetPlayersView();
-            players.Players = new List<GetPlayersViewItem>();
             var getPlayers = await _playerRepository.GetPlayers();
-            foreach (Player p in getPlayers)
-            {
-                GetPlayersViewItem player = new GetPlayersViewItem();
-                player.Id = p.Id;
-                player.Name = p.Name;
-                players.Players.Add(player);
-            }
+            players.Players = getPlayers.Select(x=> new GetPlayersViewItem() {
+                Id = x.Id,
+                Name = x.Name
+            }).ToList();
             return players;
         }
 

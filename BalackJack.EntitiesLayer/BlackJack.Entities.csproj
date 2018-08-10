@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\CardName.cs" />
+    <Compile Include="Enums\GameResult.cs" />
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Enums\Suit.cs" />
     <Compile Include="Models\BaseEntity.cs" />

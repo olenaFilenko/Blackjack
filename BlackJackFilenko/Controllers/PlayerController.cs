@@ -24,11 +24,11 @@ namespace BlackJackFilenko.Controllers
         }
 
       [HttpPost]
-        public async Task<ActionResult> Add(AddPlayerView models)
+        public async Task<ActionResult> Add(AddPlayerView player)
         {
             try
             {
-                await _playerService.AddPlayer(models);
+                await _playerService.AddPlayer(player);
                 return RedirectToAction("Start","Game");
             }
             catch(Exception e)
@@ -41,13 +41,13 @@ namespace BlackJackFilenko.Controllers
         public async Task<JsonResult> GetDealers()
         {
             var dealers = await _playerService.GetDealers();
-            return Json(dealers, JsonRequestBehavior.AllowGet);
+            return Json(dealers.Dealers, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<JsonResult> GetPlayers()
         {
             var players = await _playerService.GetPlayers();
-            return Json(players, JsonRequestBehavior.AllowGet);
+            return Json(players.Players, JsonRequestBehavior.AllowGet);
         }
     }
 }

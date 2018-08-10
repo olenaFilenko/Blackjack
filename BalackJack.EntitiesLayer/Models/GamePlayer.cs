@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using BlackJack.Entities.Enums;
 using Dapper.Contrib.Extensions;
 
 namespace BlackJack.Entities.Models
@@ -10,7 +7,7 @@ namespace BlackJack.Entities.Models
     {
         public int GameId { get; set; }
         public int PlayerId { get; set; }
-        public string Result { get; set; }
+        public GameResult Result { get; set; }
         public int Points { get; set; }
 
         [Write(false)]

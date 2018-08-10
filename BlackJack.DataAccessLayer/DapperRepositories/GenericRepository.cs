@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BlackJack.DataAccess.Interfaces;
-using Dapper;
 using Dapper.Contrib.Extensions;
 
 namespace BlackJack.DataAccess.DapperRepositories
@@ -28,6 +25,14 @@ namespace BlackJack.DataAccess.DapperRepositories
                 id = await db.InsertAsync<TEntity>(entity);
             }
             return id;
+        }
+
+        public async Task Add(List<TEntity> entities)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+               var ids = await db.InsertAsync(entities);
+            }
         }
 
         public async Task<IEnumerable<TEntity>> All()
@@ -57,12 +62,20 @@ namespace BlackJack.DataAccess.DapperRepositories
             }
             return entity;
         }
-
+        
         public async Task Update(TEntity entity)
         {
             using(IDbConnection db=new SqlConnection(_connectionString))
             {
                 await db.UpdateAsync<TEntity>(entity);
+            }
+        }
+
+        public async Task Update(List<TEntity> entities)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                await db.UpdateAsync(entities);
             }
         }
     }

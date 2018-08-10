@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using BlackJack.DataAccess.EntityFrameworkRepository;
 using BlackJack.DataAccess.Interfaces;
-using BlackJack.Entities.Models;
 
 namespace BlackJack.DataAccess.EntityFrameworkRepository
 {
@@ -49,6 +46,24 @@ namespace BlackJack.DataAccess.EntityFrameworkRepository
             await _context.SaveChangesAsync();
         }
 
+        public async Task Update(List<TEntity> entities)
+        {
+            foreach(TEntity entity in entities)
+            {
+                _context.Entry(entity).State = EntityState.Modified;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Add(List<TEntity> entities)
+        {
+            foreach (TEntity entity in entities)
+            {
+                _context.Set<TEntity>().Add(entity);
+            }
+            await _context.SaveChangesAsync();
+        }
+
         private bool _disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -68,5 +83,7 @@ namespace BlackJack.DataAccess.EntityFrameworkRepository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        
     }
 }

@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlackJack.Entities.Enums;
 using BlackJack.Entities.Models;
 
 
-namespace BlackJack.DataAccess.Iterfaces
+namespace BlackJack.DataAccess.Interfaces
 {
-    public interface IGameRepository
+    public interface IGameRepository:IGenericRepository<Game>
     {
-        Task<IEnumerable<Game>> GetGames();
-        Task<Game> GetGameById(int id);
-        Task<int> InsertGame(Game game);
-        Task DeleteGame(int id);
-        Task UpdateGame(Game game);
-        Task Save();
+        Task<IEnumerable<Game>> GetAllGamesIncludeGamePlyerEntity();
     }
 }

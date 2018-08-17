@@ -1,1 +1,32 @@
 <p>Here should be placed strat game form</p>
+<h2>Start new game</h2>
+<div>
+  <label for="name" class="control-label col-md-2">Enter name of the game:</label>
+  <input type="text" [(ngModel)]="data.name" id="name" class="form-control" />
+  <label for="dealersList" class="control-label col-md-2">Choose dealer:</label>
+  <select id="dealersList" [(ngModel)]="data.dealerId" name="dealer" class="dropdown" required>
+    <option *ngFor="let dealer of data.dealers" value={{dealer.id}}>{{dealer.name}}</option>
+  </select>
+  <div [hidden]="dealer.valid || dealer.untouched" class="alert alert-danger">
+    Enter the dealer
+  </div>
+  <label for="playersList" class="control-label col-md-2">Choose player</label>
+  <select id=playersList [(ngModel)]="data.playerId" class="dropdown" name="player" required>
+    <option *ngFor="let player of data.players" value={{player.id}}>{{player.name}}</option>
+  </select>
+  <div [hidden]="player.valid || player.untouched" class="alert alert-danger">
+    Enter the player
+  </div>
+  <button [hidden]="!noNewPlayer" id="addNewPlayer" (click)="addPlayer()" class="btn btn-default">Add player</button>
+  <div [hidden]="noNewPlayer">
+    <label for="newPlayerName" class="control-label col-md-2">Enter new player's name</label>
+    <input id="newPlayerName" type="text" [(ngModel)]="data.newPlayerName" class="form-control" />
+    <button (click)="createNewPlayer()" class="btn btn-default">Add player</button>
+  </div>
+  <label for="botsNumber" class="control-label col-md-2">Enter bots number</label>
+  <input type="number" [(ngModel)]="data.botsNumber" name="botsNumber" id="botsNumber" class="form-control" required pattern="[0-5]" />
+  <div [hidden]="botsNumber.valid || botsNumber.untouched" class="alert alert-danger">
+    Incorrect enter. Bots number should be between 0 and 5
+  </div>
+  <button (click)="submit()" class="btn btn-default">Start game</button>
+</div>

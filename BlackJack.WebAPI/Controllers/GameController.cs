@@ -22,6 +22,20 @@ namespace BlackJack.WebAPI.Controllers
             _gameService= gameService;
         }
 
+        public async Task<IHttpActionResult> GetGameDetails(int gameId)
+        {
+            try
+            {
+                DetailsGameView game = await _gameService.Details(gameId);
+                return Ok(game);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                return BadRequest();
+            }
+        }
+
         public async Task<IHttpActionResult> GetStart()
         {
             try

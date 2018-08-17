@@ -263,14 +263,17 @@
     <TypeScriptCompile Include="ClientApp\src\app\app.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\error\error.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\game-result.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game-result\game-result.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\shared\game-player-game-result-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\shared\game-result.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\shared\game-result.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\history-of-games.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\history-of-games\history-of-games.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\shared\history-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\shared\history.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\shared\history.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\play-game.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\play-game\play-game.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\game-player-play-game-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\play-game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\play-game.service.ts" />
@@ -278,6 +281,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\start-game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\start-game.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\start-game.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\start-game\start-game.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.ts" />
     <TypeScriptCompile Include="ClientApp\src\main.ts" />

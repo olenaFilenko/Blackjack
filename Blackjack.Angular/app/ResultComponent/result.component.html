@@ -1,0 +1,35 @@
+﻿<h2>Game's results</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Game</dt>
+        <dd>{{data.name}}</dd>
+        <dt>Created</dt>
+        <dd>{{data.creationDate}}</dd>
+    </dl>
+</div>
+<div>
+    <table class="table">
+        <tr>
+            <td>Dealer</td>
+            <td>Dealer's points</td>
+        </tr>
+        <tr>
+            <td>{{data.dealer.name}}</td>
+            <td>{{data.dealer.points}}</td>
+        </tr>
+    </table>
+</div>
+<div>
+    <table class="table table-bordered">
+        <tr>
+            <td>Player</td>
+            <td>Playres points</td>
+            <td>Players result</td>
+        </tr>
+        <tr *ngFor="let player of data.players">
+            <td>{{player.name}}</td>
+            <td>{{player.points}}</td>
+            <td>{{player.result}}</td>
+        </tr>
+    </table>
+</div>

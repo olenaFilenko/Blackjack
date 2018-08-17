@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJack.ViewModels", "Bla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJack.WebAPI", "BlackJack.WebAPI\BlackJack.WebAPI.csproj", "{8DB9A126-0BE0-42EA-805B-90F5586862ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Angular", "Blackjack.Angular\Blackjack.Angular.csproj", "{4151E04A-BBF7-4D51-9CF8-29EF9A72F88D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Angular6", "Blackjack.Angular6\Blackjack.Angular6.csproj", "{2F786A82-992E-4F9C-BCF4-98A403104ACD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DB9A126-0BE0-42EA-805B-90F5586862ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4151E04A-BBF7-4D51-9CF8-29EF9A72F88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4151E04A-BBF7-4D51-9CF8-29EF9A72F88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4151E04A-BBF7-4D51-9CF8-29EF9A72F88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4151E04A-BBF7-4D51-9CF8-29EF9A72F88D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F786A82-992E-4F9C-BCF4-98A403104ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F786A82-992E-4F9C-BCF4-98A403104ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F786A82-992E-4F9C-BCF4-98A403104ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F786A82-992E-4F9C-BCF4-98A403104ACD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

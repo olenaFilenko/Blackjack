@@ -1,0 +1,21 @@
+<h2>Games histoty</h2>
+<div>
+  <table class="table">
+    <tr>
+      <td>Game</td>
+      <td>Dealer</td>
+      <td>Player</td>
+      <td>Creation date</td>
+      <td></td>
+    </tr>
+    <tr *ngFor="let game of data.games">
+      <td>{{game.name}}</td>
+      <td>{{game.dealerName}}</td>
+      <td>{{game.playerName}}</td>
+      <td>{{creationDate}}</td>
+      <td>
+        <a [routerLink]="['/result', game.id]">Look game's results</a>
+      </td>
+    </tr>
+  </table>
+</div>

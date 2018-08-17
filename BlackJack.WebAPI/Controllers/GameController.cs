@@ -5,12 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels.GameServiceViewModels;
 using NLog;
 
 namespace BlackJack.WebAPI.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class GameController : ApiController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -92,6 +94,7 @@ namespace BlackJack.WebAPI.Controllers
             }
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<IHttpActionResult> GetGamesHistory()
         {
             try

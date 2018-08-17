@@ -1,5 +1,5 @@
 import { HistoryGameViewItem } from './history-item.model'
 
-export class HistoryGameView {
+export interface HistoryGameView {
   games: HistoryGameViewItem[]
 }

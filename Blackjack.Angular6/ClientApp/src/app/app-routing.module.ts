@@ -1,10 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [];
+import { HistoryComponent } from './history-of-games/history-of-games.component';
+import { GameResultComponent } from './game-result/game-result.component';
+import { PlayGameComponent } from './play-game/play-game.component';
+import { StartGameComponent } from './start-game/start-game.component';
+import { ErrorComponent } from './error/error.component';
+
+const routes: Routes = [
+  { path: 'history', component: HistoryComponent },
+  { path: 'result/:id', component: GameResultComponent },
+  { path: 'play/:id', component: PlayGameComponent },
+  { path: 'start', component: StartGameComponent },
+  { path: '', redirectTo: 'history', pathMatch: 'full' },
+  { path: '**', component: ErrorComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
+  declarations: [HistoryComponent, StartGameComponent, PlayGameComponent, GameResultComponent, ErrorComponent],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

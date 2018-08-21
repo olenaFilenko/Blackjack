@@ -8,7 +8,7 @@ import { HistoryGameView } from './history.model';
 export class HistoryService {
   constructor(private _http: HttpClient) { }
   getHistory() {
-    return this._http.get("http://localhost:61433/Game/GetGamesHistory");
+    return this._http.get("http://localhost:61433/api/Game/GetGamesHistory");
   }
   
 }

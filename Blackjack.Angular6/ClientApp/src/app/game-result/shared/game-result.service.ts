@@ -10,8 +10,8 @@ export class ResultGameService {
   constructor(private _http: HttpClient) { }
 
   getDetails(id: number) {
-    const params = new HttpParams().set('gameId', id.toString());
-    return this._http.get("http://localhost:61433/Game/GetGameDetails", { params })
+    //const params = new HttpParams().set('id', id.toString());
+    return this._http.get("http://localhost:61433/api/Game/details/" + id);
   }
 
 }

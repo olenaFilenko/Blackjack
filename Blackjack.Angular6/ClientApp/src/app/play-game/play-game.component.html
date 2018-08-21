@@ -1,16 +1,15 @@
-<p>Here should be placed play view</p>
 <h2>Play game</h2>
 <div>
   <dl class="dl-horizontal">
     <dt>Game</dt>
     <dd>{{data.name}}</dd>
     <dt>Created</dt>
-    <dd>{{data.creationDate}}</dd>
+    <dd>{{data.creationDate| date:'medium'}}</dd>
   </dl>
 </div>
 <div>
-  <button (click)="More()" class="btn btn-default btn-block">More</button>
-  <button (click)="Enough()" class="btn btn-default btn-block">Enough</button>
+  <button (click)="More()" class="btn btn-default">More</button>
+  <button (click)="Enough()" class="btn btn-default">Enough</button>
 </div>
 <div>
   <table class="table">

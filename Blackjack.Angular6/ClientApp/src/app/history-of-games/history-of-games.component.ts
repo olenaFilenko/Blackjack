@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HistoryService } from './shared/history.service';
 import { HistoryGameView } from './shared/history.model';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./history-of-games.component.css'],
   providers: [HistoryService]
 })
-export class HistoryComponent {
+export class HistoryComponent implements OnInit {
   data: HistoryGameView;
 
   constructor(private gameService: HistoryService, private router: Router) { }
@@ -18,8 +18,14 @@ export class HistoryComponent {
     this.router.navigate(['/result', id]);
   }
 
+  startGame() {
+    this.router.navigate(['/start']);
+  }
+
   ngOnInit() {
-    this.gameService.getHistory().subscribe(data => this.data.games = data['games']);
+    this.gameService.getHistory().subscribe((data: HistoryGameView) => {
+      this.data = data;
+    });
   }
 
   

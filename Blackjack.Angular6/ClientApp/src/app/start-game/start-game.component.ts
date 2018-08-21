@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { StartGameView } from './shared/start-game.model';
 import { StartGameService } from "./shared/start-game.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'start-game-comp',
@@ -10,18 +11,17 @@ import { StartGameService } from "./shared/start-game.service";
   providers:[StartGameService]
 })
 
-export class StartGameComponent {
+export class StartGameComponent implements OnInit{
   data: StartGameView;
   gameId: number;
   noNewPlayer: boolean;
 
-  constructor(private gameService: StartGameService, private _router: Router, ) { }
+  constructor(private gameService: StartGameService, private _router: Router) { }
 
   ngOnInit() {
     this.noNewPlayer = true;
-    this.gameService.getStart().subscribe(data => {
-      this.data.dealers = data['dealers'];
-      this.data.players = data['players'];
+    this.gameService.getStart().subscribe((data: StartGameView) => {
+      this.data = data;      
     });
   }
 
@@ -34,8 +34,12 @@ export class StartGameComponent {
   }
 
   submit() {
-    this.gameService.postStart(this.data).subscribe(data => this.gameId = data['id']);
-    this._router.navigate(['/play', { queryParams: { id: this.gameId } }]);
+    this.gameService.postStart(this.data).subscribe((data: number) => {
+      this.gameId = data;
+    });
+    let id = this.gameId;
+    console.log(id);
+    this._router.navigate(['/play', id]);
   }
 
 }

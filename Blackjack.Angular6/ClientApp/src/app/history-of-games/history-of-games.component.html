@@ -1,7 +1,8 @@
 <h2>Games history</h2>
+<button (click)="startGame()" class="btn btn-default">Start new game</button>
 <div>
   <table class="table">
-    <tr>
+    <tr class="header">
       <td>Game</td>
       <td>Dealer</td>
       <td>Player</td>
@@ -12,9 +13,9 @@
       <td>{{game.name}}</td>
       <td>{{game.dealerName}}</td>
       <td>{{game.playerName}}</td>
-      <td>{{game.creationDate}}</td>
+      <td>{{game.creationDate| date:'medium'}}</td>
       <td>
-        <a>Look game's results</a>
+        <button (click)="showResults(game.id)" class="btn btn-default">Look game's results</button>
       </td>
     </tr>
   </table>

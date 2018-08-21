@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -9,6 +10,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using BlackJack.BusinessLogicLayer;
 
 namespace BlackJack.WebAPI
@@ -24,10 +26,14 @@ namespace BlackJack.WebAPI
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(WebApiApplication).Assembly);
+            builder.RegisterApiControllers(typeof(WebApiApplication).Assembly);
+            // builder.RegisterControllers(Assembly.GetExecutingAssembly()); //Register MVC Controllers
+            //builder.RegisterApiControllers(Assembly.GetExecutingAssembly()); //Register WebApi Controllers
             string connectionString = ConfigurationManager.ConnectionStrings["BlackJackDb"].ConnectionString;
             AutofacConfig.Configure(builder, connectionString);
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver((IContainer)container); //Set the WebApi DependencyResolver
         }
     }
 }

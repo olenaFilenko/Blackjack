@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace BlackJack.WebAPI
 {
@@ -9,16 +11,20 @@ namespace BlackJack.WebAPI
     {
         public static void Register(HttpConfiguration config)
         {
+
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+            var cors = new EnableCorsAttribute("*", "*", "*");
             // Web API configuration and services
-            config.EnableCors();
+            config.EnableCors(cors);
             // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+              name: "Api",
+              routeTemplate: "api/{controller}/{action}/{id}",
+              defaults: new { id = RouteParameter.Optional }
+          );           
         }
     }
 }

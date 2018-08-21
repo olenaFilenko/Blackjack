@@ -10,6 +10,7 @@ import { GameResultModule } from './game-result/game-result.module';
 import { StartGameModule } from './start-game/start-game.module';
 import { PlayGameModule } from './play-game/play-game.module';
 import { HistoryModule } from './history-of-games/history-of-games.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { HistoryModule } from './history-of-games/history-of-games.module';
   imports: [
     HttpClientModule,
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     GameResultModule,
     StartGameModule,

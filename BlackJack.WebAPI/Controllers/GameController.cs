@@ -8,25 +8,30 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using BlackJack.BusinessLogic.Interfaces;
 using BlackJack.ViewModels.GameServiceViewModels;
+using Newtonsoft.Json.Serialization;
 using NLog;
 
 namespace BlackJack.WebAPI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("api/game")]
     public class GameController : ApiController
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private IGameService _gameService;
 
-        public GameController(IGameService gameService) {
+       // public GameController() { }
+
+        public GameController(IGameService gameService)
+        {
             _gameService= gameService;
         }
 
-        public async Task<IHttpActionResult> GetGameDetails(int gameId)
+        [Route("details/{id:int}")]
+        public async Task<IHttpActionResult> GetGameDetails(int id)
         {
             try
             {
-                DetailsGameView game = await _gameService.Details(gameId);
+                DetailsGameView game = await _gameService.Details(id);
                 return Ok(game);
             }
             catch (Exception e)
@@ -36,6 +41,7 @@ namespace BlackJack.WebAPI.Controllers
             }
         }
 
+        [Route("getstart")]
         public async Task<IHttpActionResult> GetStart()
         {
             try
@@ -44,13 +50,14 @@ namespace BlackJack.WebAPI.Controllers
                 startGameView = await _gameService.Start();
                 return Ok(startGameView);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Error(e.Message);
                 return BadRequest();
             }
         }
 
+        [Route("postgame")]
         public async Task<IHttpActionResult> PostGame([FromBody]StartGameView startGameView)
         {
             try
@@ -65,20 +72,19 @@ namespace BlackJack.WebAPI.Controllers
             }
         }
 
+        [Route("getplay/{id:int}")]
         public async Task<IHttpActionResult> GetPlay(int id)
         {
             try
             {
                 PlayGameView playGameView = new PlayGameView();
                 playGameView = await _gameService.Play(id);
+                
                 if (playGameView != null)
                 {
                     return Ok(playGameView);
                 }
-                else
-                {
-                    return NotFound();
-                }
+                return NotFound();
             }
             catch(Exception e)
             {
@@ -87,18 +93,12 @@ namespace BlackJack.WebAPI.Controllers
             }
         }
 
-        public async Task<IHttpActionResult> PutPlayerAction(int id, bool isMoreRequred)
+        [Route("enough/{id:int}")]
+        public async Task<IHttpActionResult> PutEnough(int id)
         {
             try
             {
-                if (isMoreRequred)
-                {
-                    await _gameService.More(id);
-                }
-                else
-                {
-                    await _gameService.Enough(id);
-                }
+                await _gameService.Enough(id);
                 return Ok();
             }
             catch(Exception e)
@@ -108,14 +108,30 @@ namespace BlackJack.WebAPI.Controllers
             }
         }
 
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [Route("more/{id:int}")]
+        public async Task<IHttpActionResult> PutMore(int id)
+        {
+            try
+            {
+                await _gameService.More(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                return BadRequest();
+            }
+        }
+
+        [Route("getgameshistory")]
         public async Task<IHttpActionResult> GetGamesHistory()
         {
             try
             {
-                return Ok(await _gameService.History());
+                HistoryGameView history = await _gameService.History();
+                return Ok(history);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Error(e.Message);
                 return BadRequest();

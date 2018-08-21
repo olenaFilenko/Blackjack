@@ -9,7 +9,7 @@
     <select id="dealersList" [(ngModel)]="data.dealerId" name="dealer" class="dropdown" required #myDealer="ngModel">
       <option *ngFor="let dealer of data.dealers" [ngValue]="dealer.id">{{dealer.name}}</option>
     </select>
-    <div [hidden]="myDealer.valid || dealer.untouched" class="alert alert-danger">
+    <div [hidden]="myDealer.valid || myDealer.untouched" class="alert alert-danger">
       Enter the dealer
     </div>
   </div>
@@ -18,7 +18,7 @@
     <select id=playersList [(ngModel)]="data.playerId" class="dropdown" name="player" #myPlayer="ngModel">
       <option *ngFor="let player of data.players" [ngValue]="player.id">{{player.name}}</option>
     </select>
-    <div [hidden]="myPlayer.valid || player.untouched" class="alert alert-danger">
+    <div *ngIf="!(myPlayer.valid || myPlayer.untouched)" class="alert alert-danger">
       Enter the player
     </div>
     <button *ngIf="noNewPlayer" id="addNewPlayer" (click)="addPlayer()" class="btn btn-default">Add player</button>

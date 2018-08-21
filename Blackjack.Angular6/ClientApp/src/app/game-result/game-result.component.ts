@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DetailsGameView } from './shared/game-result.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ResultGameService } from './shared/game-result.service';
 
 @Component({
@@ -14,7 +14,11 @@ export class GameResultComponent implements OnInit {
   data: DetailsGameView;
   id: number;
 
-  constructor(private gameService: ResultGameService, private _Activatedroute: ActivatedRoute) { }
+  constructor(private gameService: ResultGameService, private _Activatedroute: ActivatedRoute, private _router: Router) { }
+
+  back() {
+    this._router.navigate(['/history']);
+  }
 
   ngOnInit() {
     this._Activatedroute.params.subscribe(params => { this.id = params['id']; });

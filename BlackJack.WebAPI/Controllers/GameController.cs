@@ -108,6 +108,21 @@ namespace BlackJack.WebAPI.Controllers
             }
         }
 
+        [Route("enough/{id:int}")]
+        public async Task<IHttpActionResult> GetEnough(int id)
+        {
+            try
+            {
+                await _gameService.Enough(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                return BadRequest();
+            }
+        }
+
         [Route("more/{id:int}")]
         public async Task<IHttpActionResult> PutMore(int id)
         {

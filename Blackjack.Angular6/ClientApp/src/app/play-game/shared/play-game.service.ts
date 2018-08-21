@@ -17,12 +17,12 @@ export class PlayGameService {
   postMore(id: number) {
     //const params = new HttpParams().set('id', id.toString())
     //  .set('isMoreRequred', (true).valueOf.toString());
-    this._http.put("http://localhost:61433/api/Game/More/" + id,null);
+    return this._http.put("http://localhost:61433/api/Game/More/" + id, null);
   }
 
   postEnough(id: number) {
     //const params = new HttpParams().set('id', id.toString())
     //  .set('isMoreRequred', (false).valueOf.toString());
-    this._http.put("http://localhost:61433/api/Game/Enough/" + id, null);
+    return this._http.put("http://localhost:61433/api/Game/Enough/" + id, null);
   }
 }

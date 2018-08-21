@@ -13,7 +13,7 @@ import { Observable } from "rxjs";
 
 export class StartGameComponent implements OnInit{
   data: StartGameView;
-  gameId: number;
+  gameId: string;
   noNewPlayer: boolean;
 
   constructor(private gameService: StartGameService, private _router: Router) { }
@@ -34,12 +34,10 @@ export class StartGameComponent implements OnInit{
   }
 
   submit() {
-    this.gameService.postStart(this.data).subscribe((data: number) => {
-      this.gameId = data;
+    this.gameService.postStart(this.data).subscribe(response => {
+      let id = response;      
+      this._router.navigate(['/play', id]);
     });
-    let id = this.gameId;
-    console.log(id);
-    this._router.navigate(['/play', id]);
   }
 
 }

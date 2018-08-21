@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PlayGameView } from "./shared/play-game.model";
 import { PlayGameService } from "./shared/play-game.service";
 
@@ -14,7 +14,7 @@ export class PlayGameComponent implements OnInit {
   data: PlayGameView;
   id: number;
 
-  constructor(private gameService: PlayGameService, private _Activatedroute: ActivatedRoute) { }
+  constructor(private gameService: PlayGameService, private _Activatedroute: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
     this._Activatedroute.params.subscribe(params => { this.id = params['id']; });
@@ -24,19 +24,20 @@ export class PlayGameComponent implements OnInit {
   }
 
   More() {
-    this.gameService.postMore(this.data.id);
-    //this.gameService.getPlay(this.data.id).subscribe((data: PlayGameView) => {
-    //  this.data.dealer = data['dealer'];
-    //  this.data.players = data['players'];
-    //});
+    this.gameService.postMore(this.data.id).subscribe(response => {
+      this.gameService.getPlay(this.data.id).subscribe((data: PlayGameView) => {
+        this.data.dealer = data['dealer'];
+        this.data.players = data['players'];
+      });
+    });
+    
   }
 
   Enough() {
-    this.gameService.postEnough(this.data.id);
-    //this.gameService.getPlay(this.data.id).subscribe((data: PlayGameView) => {
-    //  this.data.dealer = data['dealer'];
-    //  this.data.players = data['players'];
-    //});
+    this.gameService.postEnough(this.data.id).subscribe(response => {
+      let id = this.data.id;
+      this._router.navigate(['/result', id]);
+    });
   }
 
 }

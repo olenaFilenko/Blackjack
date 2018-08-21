@@ -23,8 +23,8 @@
   <table class="table table-bordered">
     <tr>
       <td>Player</td>
-      <td>Playres points</td>
-      <td>Players result</td>
+      <td>Player's points</td>
+      <td>Player's result</td>
     </tr>
     <tr *ngFor="let player of data.players">
       <td>{{player.name}}</td>
@@ -32,4 +32,5 @@
       <td>{{player.result}}</td>
     </tr>
   </table>
+  <button (click)="back()" class="btn btn-default">Back to history</button>
 </div>

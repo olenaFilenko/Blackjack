@@ -14,6 +14,12 @@ export class HistoryComponent implements OnInit {
 
   constructor(private gameService: HistoryService, private router: Router) { }
 
+  ngOnInit() {
+    this.gameService.getHistory().subscribe((data: HistoryGameView) => {
+      this.data = data;
+    });
+  }
+ 
   showResults(id:number) {
     this.router.navigate(['/result', id]);
   }
@@ -22,11 +28,4 @@ export class HistoryComponent implements OnInit {
     this.router.navigate(['/start']);
   }
 
-  ngOnInit() {
-    this.gameService.getHistory().subscribe((data: HistoryGameView) => {
-      this.data = data;
-    });
-  }
-
-  
 }

@@ -157,11 +157,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\dist\ClientApp\3rdpartylicenses.txt" />
+    <Content Include="ClientApp\dist\ClientApp\error-error-module.js" />
     <Content Include="ClientApp\dist\ClientApp\favicon.ico" />
+    <Content Include="ClientApp\dist\ClientApp\game-result-game-result-module.js" />
+    <Content Include="ClientApp\dist\ClientApp\history-of-games-history-of-games-module.js" />
     <Content Include="ClientApp\dist\ClientApp\index.html" />
     <Content Include="ClientApp\dist\ClientApp\main.js" />
+    <Content Include="ClientApp\dist\ClientApp\play-game-play-game-module.js" />
     <Content Include="ClientApp\dist\ClientApp\polyfills.js" />
     <Content Include="ClientApp\dist\ClientApp\runtime.js" />
+    <Content Include="ClientApp\dist\ClientApp\start-game-start-game-module.js" />
     <Content Include="ClientApp\dist\ClientApp\styles.js" />
     <Content Include="ClientApp\dist\ClientApp\vendor.js" />
     <Content Include="ClientApp\e2e\protractor.conf.js" />
@@ -261,17 +266,22 @@
     <TypeScriptCompile Include="ClientApp\src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\error\error-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\error\error.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\error\error.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\game-result\game-result-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\game-result.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\game-result.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\shared\game-player-game-result-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\shared\game-result.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\game-result\shared\game-result.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\history-of-games\history-of-games-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\history-of-games.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\history-of-games.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\shared\history-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\shared\history.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\history-of-games\shared\history.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\play-game\play-game-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\play-game.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\play-game.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\game-player-play-game-item.model.ts" />
@@ -280,6 +290,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\player-start-game-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\start-game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\start-game.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\start-game\start-game-routing.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\start-game.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\start-game.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />

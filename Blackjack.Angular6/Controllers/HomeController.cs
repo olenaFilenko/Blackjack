@@ -10,10 +10,11 @@ namespace Blackjack.Angular6.Controllers
     {
         public ActionResult Index()
         {
+            //return Redirect("~/ClientApp/dist/ClientApp/index.html");
             //return new FilePathResult("~/ClientApp/dist/ClientApp/index.html", "text/html");
             return View();
         }
 
-       
+
     }
 }

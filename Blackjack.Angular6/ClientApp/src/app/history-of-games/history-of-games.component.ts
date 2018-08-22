@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./history-of-games.component.css'],
   providers: [HistoryService]
 })
+
 export class HistoryComponent implements OnInit {
   data: HistoryGameView;
 

@@ -1,8 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { StartGameView } from './shared/start-game.model';
-import { StartGameService } from "./shared/start-game.service";
 import { Observable } from "rxjs";
+
+import { StartGameService } from "./shared/start-game.service";
 
 @Component({
   selector: 'start-game-comp',

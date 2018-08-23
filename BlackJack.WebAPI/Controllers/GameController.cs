@@ -18,9 +18,7 @@ namespace BlackJack.WebAPI.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private IGameService _gameService;
-
-       // public GameController() { }
-
+               
         public GameController(IGameService gameService)
         {
             _gameService= gameService;
@@ -107,22 +105,7 @@ namespace BlackJack.WebAPI.Controllers
                 return BadRequest();
             }
         }
-
-        [Route("enough/{id:int}")]
-        public async Task<IHttpActionResult> GetEnough(int id)
-        {
-            try
-            {
-                await _gameService.Enough(id);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-                return BadRequest();
-            }
-        }
-
+       
         [Route("more/{id:int}")]
         public async Task<IHttpActionResult> PutMore(int id)
         {

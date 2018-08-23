@@ -11,12 +11,12 @@ namespace BlackJack.ViewModels.GameServiceViewModels
         public List<PlayerStartGameViewItem> Dealers{ get; set; }
 
         [Display(Name="Choose dealer")]
-        public int DealerId { get; set; }
+        public int? DealerId { get; set; }
 
         public List<PlayerStartGameViewItem> Players { get; set; }
 
         [Display(Name = "Choose player")]
-        public int PlayerId { get; set; }
+        public int? PlayerId { get; set; }
 
         public string NewPlayerName { get; set; }
 

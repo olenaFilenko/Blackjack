@@ -160,7 +160,7 @@ namespace BlackJack.BusinessLogic.Services
             int gameId = await _gameRepository.Add(game);
             GamePlayer dealer = new GamePlayer();
             dealer.GameId = gameId;
-            dealer.PlayerId = startGameView.DealerId;
+            dealer.PlayerId = (int)startGameView.DealerId;
             dealer.Points = 0;
             dealer.Result = GameResult.More;
             await _gamePlayerRepository.Add(dealer);
@@ -173,7 +173,7 @@ namespace BlackJack.BusinessLogic.Services
             }
             GamePlayer player = new GamePlayer();
             player.GameId = gameId;
-            player.PlayerId = startGameView.PlayerId;
+            player.PlayerId =(int) startGameView.PlayerId;
             player.Points = 0;
             player.Result = GameResult.More;
             await _gamePlayerRepository.Add(player);

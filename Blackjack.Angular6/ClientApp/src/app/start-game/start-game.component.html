@@ -1,42 +1,44 @@
-<h2>Start new game</h2>
-<div class="form-horizontal">
-  <div class="form-group">
-    <label for="name" class="control-label col-md-2">Enter name of the game:</label>
-    <input type="text" [(ngModel)]="data.name" id="name" class="form-control" />
-  </div>
-  <div class="form-group">
-    <label for="dealersList" class="control-label col-md-2">Choose dealer:</label>
-    <select id="dealersList" [(ngModel)]="data.dealerId" name="dealer" class="dropdown" required #myDealer="ngModel">
-      <option *ngFor="let dealer of data.dealers" [ngValue]="dealer.id">{{dealer.name}}</option>
-    </select>
-    <div [hidden]="myDealer.valid || myDealer.untouched" class="alert alert-danger">
-      Enter the dealer
+<div class="container">
+  <h2>Start new game</h2>
+  <form (ngSubmit)="onSubmit()" #startForm="ngForm">
+    <div class="form-group">
+      <label for="name" class="control-label col-md-2">Enter name of the game:</label>
+      <input type="text" [(ngModel)]="data.name" id="name" name="name" class="form-control" />
     </div>
-  </div>
-  <div class="form-group">
-    <label for="playersList" class="control-label col-md-2">Choose player</label>
-    <select id=playersList [(ngModel)]="data.playerId" class="dropdown" name="player" #myPlayer="ngModel">
-      <option *ngFor="let player of data.players" [ngValue]="player.id">{{player.name}}</option>
-    </select>
-    <div *ngIf="!(myPlayer.valid || myPlayer.untouched)" class="alert alert-danger">
-      Enter the player
+    <div class="form-group">
+      <label for="dealersList" class="control-label col-md-2">Choose dealer:</label>
+      <select id="dealersList" required [(ngModel)]="data.dealerId" name="dealerId" class="form-control" #dealerId="ngModel">
+        <option *ngFor="let dealer of data.dealers" [value]="dealer.id">{{dealer.name}}</option>
+      </select>
+      <div [hidden]="dealerId.valid||dealerId.untouched" class="alert alert-danger">
+        Enter the dealer
+      </div>
     </div>
-    <button *ngIf="noNewPlayer" id="addNewPlayer" (click)="addPlayer()" class="btn btn-default">Add player</button>
-    <div *ngIf="!noNewPlayer">
-      <label for="newPlayerName" class="control-label col-md-2">Enter new player's name</label>
-      <input id="newPlayerName" type="text" [(ngModel)]="data.newPlayerName" class="form-control" />
-      <button (click)="createNewPlayer()" class="btn btn-default">Add player</button>
+    <div class="form-group">
+      <label for="playersList" class="control-label col-md-2">Choose player</label>
+      <select id="playersList" required [(ngModel)]="data.playerId" class="form-control" name="playerId" #playerId="ngModel">
+        <option *ngFor="let player of data.players" [value]="player.id">{{player.name}}</option>
+      </select>
+      <div [hidden]="playerId.valid||playerId.untouched" class="alert alert-danger">
+        Enter the player
+      </div>
+      <button *ngIf="noNewPlayer" id="addNewPlayer" (click)="addPlayer()" class="btn btn-default">Add player</button>
+      <div *ngIf="!noNewPlayer">
+        <label for="newPlayerName" class="control-label col-md-2">Enter new player's name</label>
+        <input id="newPlayerName" type="text" [(ngModel)]="data.newPlayerName" name="newPlayerName" class="form-control" #newPlayerName="ngModel"/>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="botsNumber" class="control-label col-md-2">Enter bots number</label>
-    <input type="number" [(ngModel)]="data.botsNumber" name="botsNumber" id="botsNumber" class="form-control" required pattern="[0-5]" #myBots="ngModel"/>
-    <div [hidden]="myBots.valid || botsNumber.untouched" class="alert alert-danger">
-      Incorrect enter. Bots number should be between 0 and 5
+    <div class="form-group">
+      <label for="botsNumber" class="control-label col-md-2">Enter bots number</label>
+      <input type="number" [(ngModel)]="data.botsNumber" name="botsNumber" id="botsNumber" class="form-control" required pattern="[0-5]" #botsNumber="ngModel" />
+      <div [hidden]="botsNumber.valid || botsNumber.untouched" class="alert alert-danger">
+        Incorrect enter. Bots number should be between 0 and 5
+      </div>
     </div>
-  </div>
-  <button (click)="submit()" class="btn btn-default">Start game</button>
+    <button type="submit" class="btn btn-success" [disabled]="!startForm.form.valid">Start game</button>
+  </form>
 </div>
+
 
 
 

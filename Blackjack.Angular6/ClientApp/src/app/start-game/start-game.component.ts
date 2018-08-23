@@ -16,11 +16,13 @@ export class StartGameComponent implements OnInit{
   data: StartGameView;
   gameId: string;
   noNewPlayer: boolean;
+  submitted: boolean;
 
   constructor(private gameService: StartGameService, private _router: Router) { }
 
   ngOnInit() {
     this.noNewPlayer = true;
+    this.submitted = false;
     this.gameService.getStart().subscribe((data: StartGameView) => {
       this.data = data;      
     });
@@ -28,14 +30,11 @@ export class StartGameComponent implements OnInit{
 
   addPlayer() {
     this.noNewPlayer = false;
+    this.data.playerId = 0;
   }
 
-  createNewPlayer() {
-    this.data.players.push({ id: 0, name: this.data.newPlayerName });
-  }
-
-  submit() {
-    this.gameService.postStart(this.data).subscribe(response => {
+  onSubmit() {
+      this.gameService.postStart(this.data).subscribe(response => {
       let id = response;      
       this._router.navigate(['/play', id]);
     });

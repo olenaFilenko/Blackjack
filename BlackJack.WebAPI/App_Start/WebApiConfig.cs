@@ -14,10 +14,10 @@ namespace BlackJack.WebAPI
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+
             var cors = new EnableCorsAttribute("*", "*", "*");
-            // Web API configuration and services
             config.EnableCors(cors);
-            // Web API routes
+
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

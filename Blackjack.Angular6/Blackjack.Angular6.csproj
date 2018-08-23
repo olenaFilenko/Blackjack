@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\dist\ClientApp\3rdpartylicenses.txt" />
+    <Content Include="ClientApp\dist\ClientApp\common.js" />
     <Content Include="ClientApp\dist\ClientApp\error-error-module.js" />
     <Content Include="ClientApp\dist\ClientApp\favicon.ico" />
     <Content Include="ClientApp\dist\ClientApp\game-result-game-result-module.js" />
@@ -287,6 +288,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\game-player-play-game-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\play-game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\play-game\shared\play-game.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\shared.module.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\player-start-game-item.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\start-game.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\start-game\shared\start-game.service.ts" />

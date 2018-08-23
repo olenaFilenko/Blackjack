@@ -1,17 +1,15 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from '@angular/common';
 import { HttpClientModule } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
 
 import { HistoryComponent } from "./history-of-games.component";
 import { HistoryRoutingModule } from "./history-of-games-routing.module";
+import { SharedModule } from "../shared/shared.module";
 
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     HttpClientModule,
-    FormsModule,
     HistoryRoutingModule],
   declarations: [HistoryComponent],
   providers: []
